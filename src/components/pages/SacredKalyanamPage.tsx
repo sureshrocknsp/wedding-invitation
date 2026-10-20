@@ -19,7 +19,7 @@ export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
   }, []);
 
   return (
-    <div className="sacred-kalyanam-page-root animate-card-fade-in">
+    <div className="sacred-kalyanam-page-root animate-page-fade-in">
       {/* Top Navigation Bar */}
       <header className="top-nav-bar kalyanam-page-nav">
         <button
@@ -28,7 +28,8 @@ export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
           type="button"
           aria-label="Back to Wedding Invitation"
         >
-          <span>← Back to Wedding Invitation</span>
+          <span className="back-btn-desktop">← Back to Wedding Invitation</span>
+          <span className="back-btn-mobile">← Back</span>
         </button>
 
         <div className="nav-brand kalyanam-brand">

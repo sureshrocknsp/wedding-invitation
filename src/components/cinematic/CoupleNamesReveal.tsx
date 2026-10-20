@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface CoupleNamesRevealProps {
   isRevealed: boolean;
@@ -6,6 +6,7 @@ interface CoupleNamesRevealProps {
   groomName: string;
   teluguNames?: string;
   onProceed: () => void;
+  autoProceedSeconds?: number;
 }
 
 export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
@@ -13,14 +14,47 @@ export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
   brideName,
   groomName,
   teluguNames,
-  onProceed
+  onProceed,
+  autoProceedSeconds = 4
 }) => {
+  const [secondsRemaining, setSecondsRemaining] = useState(autoProceedSeconds);
+
+  useEffect(() => {
+    if (!isRevealed) return;
+
+    setSecondsRemaining(autoProceedSeconds);
+    const interval = setInterval(() => {
+      setSecondsRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          onProceed();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRevealed, autoProceedSeconds, onProceed]);
+
   if (!isRevealed) return null;
 
   return (
     <div
       className="couple-names-sanctum-card animate-card-fade-in"
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        onProceed();
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onProceed();
+        }
+      }}
+      aria-label="Couple names card - Click or scroll down to enter invitation"
     >
       <div className="card-top-accent" aria-hidden="true"></div>
       <p className="names-tagline">శ్రీరస్తు • శుభమస్తు • కళ్యాణమస్తు</p>
@@ -32,25 +66,17 @@ export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
       </div>
 
       {teluguNames && (
-        <div
-          className="telugu-sub-names"
-          style={{
-            color: '#f9d976',
-            fontSize: '1.05rem',
-            margin: '2px 0 10px',
-            fontFamily: 'serif',
-            letterSpacing: '0.5px'
-          }}
-        >
+        <div className="telugu-sub-names">
           {teluguNames}
         </div>
       )}
 
       <p className="names-invitation-request">
         We solicit your gracious presence with family & friends<br />
-        at their auspicious wedding celebration.
+        at our auspicious wedding celebration.
       </p>
 
+      {/* Primary Action Button */}
       <button
         className="enter-invitation-btn"
         onClick={(e) => {
@@ -65,6 +91,23 @@ export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
           <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
         </svg>
       </button>
+
+      {/* Auto-proceed Indicator & Swipe Hint */}
+      <div className="auto-proceed-container" aria-hidden="true">
+        <div className="auto-proceed-progress-bar">
+          <div
+            className="auto-proceed-progress-fill"
+            style={{
+              animationDuration: `${autoProceedSeconds}s`
+            }}
+          ></div>
+        </div>
+        <p className="auto-proceed-hint">
+          {secondsRemaining > 0
+            ? `Entering invitation in ${secondsRemaining}s... • or scroll / swipe up`
+            : 'Stepping into the wedding hall...'}
+        </p>
+      </div>
     </div>
   );
 };

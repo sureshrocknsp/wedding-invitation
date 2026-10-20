@@ -27,6 +27,17 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
   const [isNamesRevealed, setIsNamesRevealed] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
 
+  const handleProceedToInvitation = useCallback(() => {
+    setIsDismissed(true);
+    onComplete();
+    setTimeout(() => {
+      const inviteSection = document.getElementById('heroInvitation');
+      if (inviteSection) {
+        inviteSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 150);
+  }, [onComplete]);
+
   const handleOpenDoors = useCallback(() => {
     if (isOpening) return;
 
@@ -37,61 +48,98 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
     // 2. Doors begin physical 3D rotation outward (t = 0s)
     setIsOpening(true);
 
-    // 3. Golden light appears through opening seam (t = 0.4s)
+    // 3. Golden light appears through opening seam (t = 0.3s)
     setTimeout(() => {
       setIsGoldenLightActive(true);
-    }, 400);
+    }, 300);
 
-    // 4. At ~60% door open, begin revealing central Lord Vinayaka (t = 1.3s)
+    // 4. Reveal central Lord Vinayaka (t = 0.8s)
     setTimeout(() => {
       setIsVinayakaRevealed(true);
-    }, 1300);
+    }, 800);
 
-    // 5. Doors fully open & subtle camera push forward through entrance (t = 2.4s)
+    // 5. Doors fully open & camera push forward into mandapam (t = 1.6s)
     setTimeout(() => {
       setIsDoorOpen(true);
       setIsCameraWalkIn(true);
-    }, 2400);
+    }, 1600);
 
-    // 6. Full mandapam illuminated in wide view (t = 3.6s)
+    // 6. Full mandapam illuminated in wide view (t = 2.4s)
     setTimeout(() => {
       setIsMandapamRevealed(true);
-    }, 3600);
+    }, 2400);
 
-    // 7. Camera settles into place (t = 5.0s)
+    // 7. Camera settles into place (t = 3.2s)
     setTimeout(() => {
       setIsSettled(true);
-    }, 5000);
+    }, 3200);
 
-    // 8. Couple Names card fades in gracefully (t = 6.0s)
+    // 8. Couple Names card fades in gracefully (t = 3.8s)
     setTimeout(() => {
       setIsNamesRevealed(true);
-    }, 6000);
+    }, 3800);
   }, [isOpening, onAudioStart, onPetalBurst]);
 
-
-  const handleProceedToInvitation = useCallback(() => {
-    setIsDismissed(true);
-    onComplete();
-    setTimeout(() => {
-      const inviteSection = document.getElementById('heroInvitation');
-      if (inviteSection) {
-        inviteSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 250);
-  }, [onComplete]);
-
-  // Keyboard trigger (Enter or Space) when closed
+  // Keyboard trigger (Enter, Space, ArrowDown)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpening && (e.key === 'Enter' || e.key === ' ')) {
         e.preventDefault();
         handleOpenDoors();
+      } else if (isOpening && (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'Enter')) {
+        handleProceedToInvitation();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpening, handleOpenDoors]);
+  }, [isOpening, handleOpenDoors, handleProceedToInvitation]);
+
+  // Mouse wheel scroll to enter invitation directly
+  useEffect(() => {
+    if (!isOpening) return;
+
+    let wheelAccumulator = 0;
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 15) {
+        wheelAccumulator += e.deltaY;
+        if (wheelAccumulator > 30) {
+          handleProceedToInvitation();
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [isOpening, handleProceedToInvitation]);
+
+  // Touch swipe-up to enter invitation on mobile
+  useEffect(() => {
+    if (!isOpening) return;
+
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches && e.touches[0]) {
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!touchStartY || !e.touches || !e.touches[0]) return;
+      const currentY = e.touches[0].clientY;
+      const diffY = touchStartY - currentY;
+      // User swiped up by more than 40px
+      if (diffY > 40) {
+        handleProceedToInvitation();
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isOpening, handleProceedToInvitation]);
 
   if (isDismissed) {
     return null;
@@ -134,10 +182,11 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
         groomName={data.couple.groom.name}
         teluguNames={`${data.couple.bride.teluguName} పరిణయం ${data.couple.groom.teluguName}`}
         onProceed={handleProceedToInvitation}
+        autoProceedSeconds={4}
       />
 
-      {/* Subtle Skip button if guest wants immediate access */}
-      {isOpening && !isNamesRevealed && (
+      {/* Prominent, accessible Skip button whenever doors are opening */}
+      {isOpening && (
         <button
           className="cinematic-skip-btn"
           onClick={(e) => {
@@ -145,9 +194,9 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
             handleProceedToInvitation();
           }}
           type="button"
-          aria-label="Skip entrance intro"
+          aria-label="Skip entrance and go directly to Wedding Invitation"
         >
-          Skip to Invitation →
+          <span>Skip to Invitation →</span>
         </button>
       )}
     </section>

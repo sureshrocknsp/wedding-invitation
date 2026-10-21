@@ -2,11 +2,16 @@ import React from 'react';
 
 interface VinayakaRevealProps {
   isRevealed: boolean;
+  isFaded?: boolean;
 }
 
-export const VinayakaReveal: React.FC<VinayakaRevealProps> = ({ isRevealed }) => {
+export const VinayakaReveal: React.FC<VinayakaRevealProps> = ({ isRevealed, isFaded }) => {
   return (
-    <div className={`vinayaka-sanctum-focus ${isRevealed ? 'revealed' : ''}`}>
+    <div
+      className={`vinayaka-sanctum-focus ${isRevealed ? 'revealed' : ''} ${
+        isFaded ? 'faded' : ''
+      }`}
+    >
       {/* Divine Soft Center Spotlight */}
       <div className="vinayaka-spotlight" aria-hidden="true"></div>
 

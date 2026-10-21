@@ -156,52 +156,33 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           </span>
         </a>
 
-        <nav className="nav-links-desktop">
-          <a href="#heroInvitation" className="nav-link">Home</a>
-          <a href="#coupleSection" className="nav-link">Couple</a>
-          <button
-            onClick={onNavigateToKalyanam}
-            className="nav-link nav-page-btn"
-            type="button"
-            title="Open Dedicated Page: The Sacred Essence of Telugu Kalyanam & 7 Vows"
-          >
-            ✨ Sacred Kalyanam (7 Vows)
-          </button>
-          <a href="#wellWishersSection" className="nav-link">Family</a>
-          <a href="#ritualsSection" className="nav-link">Rituals</a>
-          <a href="#itinerarySection" className="nav-link">Events</a>
-          <a href="#venueSection" className="nav-link">Venue</a>
-          <a href="#gallerySection" className="nav-link">Gallery</a>
-          <a href="#rsvpSection" className="nav-link">RSVP</a>
-        </nav>
 
         <div className="nav-actions">
           <button
-            onClick={onReplayEntry}
-            className="nav-btn replay-btn"
+            onClick={() => setMobileMenuOpen(true)}
+            className="side-menu-trigger-btn"
             type="button"
-            title="Replay Cinematic Entrance"
+            aria-label="Open Side Menu"
+            title="Open Full Navigation Menu"
           >
-            <span>🎬 Replay Entry</span>
-          </button>
-          <a href="#rsvpSection" className="nav-btn rsvp-nav-btn">
-            RSVP
-          </a>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="mobile-menu-btn"
-            type="button"
-            aria-label="Toggle Navigation"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
+            <span className="side-menu-bars" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+            <span className="side-menu-text">Menu</span>
           </button>
         </div>
       </header>
 
-      {/* Mobile Drawer */}
-      <div className={`mobile-nav-drawer ${mobileMenuOpen ? 'active' : ''}`}>
+      {/* Side Menu Drawer Backdrop & Drawer Panel */}
+      <div
+        className={`side-nav-backdrop ${mobileMenuOpen ? 'active' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+        aria-hidden={!mobileMenuOpen}
+      ></div>
+
+      <div className={`mobile-nav-drawer side-nav-drawer ${mobileMenuOpen ? 'active' : ''}`}>
         <div className="mobile-nav-header">
           <span className="nav-brand-text">
             Lahari & Shiva Kumar
@@ -210,6 +191,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             onClick={() => setMobileMenuOpen(false)}
             className="mobile-nav-close"
             type="button"
+            aria-label="Close menu"
           >
             &times;
           </button>
@@ -229,7 +211,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             className="mobile-nav-link mobile-nav-btn-link"
             type="button"
           >
-            🔥 వివాహ విశిష్టత & సప్తపది (Separate Page) →
+            🔥 వివాహ విశిష్టత & సప్తపది (Dedicated Page) →
           </button>
           <a href="#wellWishersSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
             💐 Family & Near and Dear
@@ -249,6 +231,16 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           <a href="#rsvpSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
             💌 Send Blessings / RSVP
           </a>
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onReplayEntry();
+            }}
+            className="mobile-nav-link mobile-nav-btn-link replay-drawer-btn"
+            type="button"
+          >
+            🎬 Replay Cinematic Entry
+          </button>
         </nav>
       </div>
 
@@ -276,13 +268,22 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           )}
 
           <h1 className="couple-names-hero">
-            <span className="couple-name-title gold-shimmer-text">
-              <span className="formal-prefix">Chi.La.Sow.</span> {data.couple.bride.name}
-            </span>
-            <span className="couple-ampersand">&</span>
-            <span className="couple-name-title gold-shimmer-text">
-              <span className="formal-prefix">Chi.</span> {data.couple.groom.name}
-            </span>
+            <div className="couple-name-row bride-row">
+              <span className="formal-prefix">Chi.La.Sow.</span>
+              <span className="couple-name-title gold-shimmer-text">Lahari</span>
+              <span className="couple-alias-badge">(Shireesha)</span>
+            </div>
+
+            <div className="couple-ampersand-wrap">
+              <span className="ampersand-flourish-line" aria-hidden="true"></span>
+              <span className="couple-ampersand">&</span>
+              <span className="ampersand-flourish-line" aria-hidden="true"></span>
+            </div>
+
+            <div className="couple-name-row groom-row">
+              <span className="formal-prefix">Chi.</span>
+              <span className="couple-name-title gold-shimmer-text">{data.couple.groom.name}</span>
+            </div>
           </h1>
 
           <div className="hero-telugu-pair-badge">
@@ -296,31 +297,31 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
           <div className="hero-event-highlight">
             <div className="highlight-item">
-              <svg viewBox="0 0 24 24">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
               </svg>
-              <span>
-                <strong>{data.weddingDateFormatted}</strong>
+              <div className="highlight-text-wrap">
+                <span className="highlight-main-title">{data.weddingDateFormatted}</span>
                 <span className="highlight-sub">{data.weddingDateTelugu}</span>
-              </span>
+              </div>
             </div>
             <div className="highlight-item">
-              <svg viewBox="0 0 24 24">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
               </svg>
-              <span>
-                Sumuhurtham: <strong>{data.muhurthamTime}</strong>
+              <div className="highlight-text-wrap">
+                <span className="highlight-main-title">Sumuhurtham: {data.muhurthamTime}</span>
                 <span className="highlight-sub">{data.muhurthamTimeTelugu}</span>
-              </span>
+              </div>
             </div>
             <div className="highlight-item">
-              <svg viewBox="0 0 24 24">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
-              <span>
-                <strong>{data.venue.name}</strong>
-                <span className="highlight-sub">{data.venue.address}, {data.venue.city}</span>
-              </span>
+              <div className="highlight-text-wrap">
+                <span className="highlight-main-title">{data.venue.name}</span>
+                <span className="highlight-sub">{data.venue.address}</span>
+              </div>
             </div>
           </div>
 
@@ -337,6 +338,22 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               </svg>
               <span>Add to Calendar</span>
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 1.5 DIVINE MUHURTHAM BLESSING CARD (MOVED UP PER REQUEST) */}
+      <section className="divine-blessing-section" id="divineBlessingSection">
+        <div className="section-container">
+          <div className="ceremony-hero-banner">
+            <span className="section-tag">Divine Muhurtham Blessing</span>
+            <h3 className="ceremony-hero-title gold-shimmer-text">
+              "శ్లో॥ ఆదిత్యాది గ్రహాస్సర్వే స్వనక్షత్ర స్వరాశయః | కుర్వంతు మంగళం తాభ్యాం యయోరుద్వాహ పత్రికా ॥"
+            </h3>
+            <p className="ceremony-hero-desc">
+              May the divine celestial deities bless Chi. Shiva Kumar Yadav and Chi.La.Sow. Lahari
+              with lifelong health, prosperity, harmony, and eternal companionships.
+            </p>
           </div>
         </div>
       </section>
@@ -550,20 +567,9 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
         </div>
       </section>
 
-      {/* 4. SACRED RITUALS & CEREMONY HERO */}
+      {/* 4. SACRED RITUALS */}
       <section className="rituals-section" id="ritualsSection">
         <div className="section-container">
-          <div className="ceremony-hero-banner">
-            <span className="section-tag">Divine Muhurtham Blessing</span>
-            <h3 className="ceremony-hero-title gold-shimmer-text">
-              "శ్లో॥ ఆదిత్యాది గ్రహాస్సర్వే స్వనక్షత్ర స్వరాశయః | కుర్వంతు మంగళం తాభ్యాం యయోరుద్వాహ పత్రికా ॥"
-            </h3>
-            <p className="ceremony-hero-desc">
-              May the divine celestial deities bless Chi. Shiva Kumar Yadav and Chi.La.Sow. Lahari
-              with lifelong health, prosperity, harmony, and eternal companionships.
-            </p>
-          </div>
-
           <div className="section-header">
             <span className="section-tag">Sacred Traditions</span>
             <h2 className="section-title">Holy Wedding Ceremonies</h2>
@@ -868,8 +874,8 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           <div className="mangalam-card">
             <div className="hero-divine-symbol">॥ మంగళమ్ ॥</div>
             <p className="mangalam-shloka-text">
-              శ్లో॥ ఆదిత్యాది గ్రహాస్సర్వే స్వనక్షత్ర స్వరాశయః |<br />
-              కుర్వంతు మంగళం తాభ్యాం యయోరుద్వాహ పత్రికా ॥
+              శ్లో॥ సర్వే భవంతు సుఖినః సర్వే సంతు నిరామయాః |<br />
+              సర్వే భద్రాణి పశ్యంతు మా కశ్చిద్దుఃఖభాగ్‌భవేత్ ॥
             </p>
             <div className="closing-thank-you">Thank You • ధన్యవాదాలు</div>
             <p className="family-gratitude-text">

@@ -22,6 +22,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
   const [isDoorOpen, setIsDoorOpen] = useState(false);
   const [isCameraWalkIn, setIsCameraWalkIn] = useState(false);
   const [isVinayakaRevealed, setIsVinayakaRevealed] = useState(false);
+  const [isVinayakaFaded, setIsVinayakaFaded] = useState(false);
   const [isMandapamRevealed, setIsMandapamRevealed] = useState(false);
   const [isSettled, setIsSettled] = useState(false);
   const [isNamesRevealed, setIsNamesRevealed] = useState(false);
@@ -53,7 +54,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
       setIsGoldenLightActive(true);
     }, 300);
 
-    // 4. Reveal central Lord Vinayaka (t = 0.8s)
+    // 4. Reveal central Lord Vinayaka & Sacred Invocation (t = 0.8s)
     setTimeout(() => {
       setIsVinayakaRevealed(true);
     }, 800);
@@ -69,15 +70,16 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
       setIsMandapamRevealed(true);
     }, 2400);
 
-    // 7. Camera settles into place (t = 3.2s)
+    // 7. Lord Vinayaka & sacred invocation gently FADE OUT (t = 3.6s)
     setTimeout(() => {
+      setIsVinayakaFaded(true);
       setIsSettled(true);
-    }, 3200);
+    }, 3600);
 
-    // 8. Couple Names card fades in gracefully (t = 3.8s)
+    // 8. AFTER Vinayaka fades, the below one (Couple Names card) comes! (t = 4.4s)
     setTimeout(() => {
       setIsNamesRevealed(true);
-    }, 3800);
+    }, 4400);
   }, [isOpening, onAudioStart, onPetalBurst]);
 
   // Keyboard trigger (Enter, Space, ArrowDown)
@@ -163,6 +165,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
         isOpening={isOpening}
         isGoldenLightActive={isGoldenLightActive}
         isVinayakaRevealed={isVinayakaRevealed}
+        isVinayakaFaded={isVinayakaFaded}
         isMandapamRevealed={isMandapamRevealed}
         isSettled={isSettled}
       />

@@ -24,8 +24,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
   // RSVP state
   const [rsvpName, setRsvpName] = useState('');
-  const [rsvpCount, setRsvpCount] = useState('2');
-  const [rsvpAttendance, setRsvpAttendance] = useState<'accept' | 'decline'>('accept');
   const [rsvpMessage, setRsvpMessage] = useState('');
   const [rsvpNameError, setRsvpNameError] = useState(false);
   const [blessings, setBlessings] = useState(data.rsvp.initialBlessings);
@@ -89,9 +87,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       time: 'Just now',
       text:
         rsvpMessage.trim() ||
-        (rsvpAttendance === 'accept'
-          ? 'Heartfelt congratulations & best wishes to Shiva Kumar & Lahari!'
-          : 'Sending our warmest prayers and divine blessings for a happy marriage!')
+        'Heartfelt congratulations & best wishes to Shiva Kumar & Lahari!'
     };
 
     const updated = [newBlessing, ...blessings];
@@ -103,9 +99,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     onPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 70);
 
     alert(
-      rsvpAttendance === 'accept'
-        ? `✨ ధన్యవాదాలు (Thank you), ${rsvpName}! ✨\n\nYour RSVP for ${rsvpCount} guest(s) and warm blessings for Lahari & Shiva Kumar have been received with joyful gratitude!`
-        : `✨ ధన్యవాదాలు (Thank you), ${rsvpName}! ✨\n\nThank you for your warm blessings and heartfelt prayers!`
+      `✨ ధన్యవాదాలు (Thank you), ${rsvpName}! ✨\n\nYour warm blessings for Lahari & Shiva Kumar have been received with joyful gratitude!`
     );
 
     setRsvpName('');
@@ -684,60 +678,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                   )}
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="rsvpGuestCount" className="form-label">
-                    Number of Guests Attending <span className="req-star">*</span>
-                  </label>
-                  <select
-                    id="rsvpGuestCount"
-                    className="form-select"
-                    value={rsvpCount}
-                    onChange={(e) => setRsvpCount(e.target.value)}
-                    required
-                  >
-                    <option value="1">1 Person</option>
-                    <option value="2">2 Persons</option>
-                    <option value="3">3 Persons</option>
-                    <option value="4">4 Persons</option>
-                    <option value="5+">5+ Family Members</option>
-                  </select>
-                </div>
 
-                <div className="form-group">
-                  <label className="form-label">
-                    Will you be attending? <span className="req-star">*</span>
-                  </label>
-                  <div className="radio-attendance-group">
-                    <label
-                      className={`attendance-radio-pill ${
-                        rsvpAttendance === 'accept' ? 'active' : ''
-                      }`}
-                      onClick={() => setRsvpAttendance('accept')}
-                    >
-                      <input
-                        type="radio"
-                        name="rsvpAttendance"
-                        checked={rsvpAttendance === 'accept'}
-                        readOnly
-                      />
-                      <span>🌸 Joyfully Accept</span>
-                    </label>
-                    <label
-                      className={`attendance-radio-pill ${
-                        rsvpAttendance === 'decline' ? 'active' : ''
-                      }`}
-                      onClick={() => setRsvpAttendance('decline')}
-                    >
-                      <input
-                        type="radio"
-                        name="rsvpAttendance"
-                        checked={rsvpAttendance === 'decline'}
-                        readOnly
-                      />
-                      <span>🕊️ Regretfully Decline</span>
-                    </label>
-                  </div>
-                </div>
 
                 <div className="form-group">
                   <label htmlFor="rsvpMessage" className="form-label">

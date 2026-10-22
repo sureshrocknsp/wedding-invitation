@@ -4,13 +4,11 @@ import { WeddingData } from '../../data/weddingData';
 interface SacredKalyanamPageProps {
   data: WeddingData;
   onBack: () => void;
-  onPetalBurst: (x: number, y: number, count: number) => void;
 }
 
 export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
   data,
-  onBack,
-  onPetalBurst
+  onBack
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
@@ -41,12 +39,12 @@ export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
 
         <div className="nav-actions">
           <button
-            onClick={(e) => onPetalBurst(e.clientX, e.clientY, 50)}
-            className="nav-btn flower-shower-nav-btn"
+            onClick={onBack}
+            className="nav-btn kalyanam-nav-action-btn"
             type="button"
-            title="Shower Holy Petals"
+            title="Return to Main Invitation"
           >
-            <span>🌸 Bless</span>
+            <span>🪷 Invitation</span>
           </button>
         </div>
       </header>
@@ -269,13 +267,6 @@ export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
             type="button"
           >
             <span>← Return to Wedding Invitation</span>
-          </button>
-          <button
-            onClick={(e) => onPetalBurst(e.clientX, e.clientY, 60)}
-            className="secondary-btn gold-glow-btn"
-            type="button"
-          >
-            <span>🌸 Shower Holy Petals & Bless 🌸</span>
           </button>
         </section>
       </main>

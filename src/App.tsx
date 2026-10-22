@@ -3,7 +3,6 @@ import { weddingData } from './data/weddingData';
 import { WeddingEntrance } from './components/cinematic/WeddingEntrance';
 import { MainInvitation } from './components/invitation/MainInvitation';
 import { SacredKalyanamPage } from './components/pages/SacredKalyanamPage';
-import { PetalCanvas } from './components/ui/PetalCanvas';
 import { AudioToggle } from './components/ui/AudioToggle';
 import { useAudioEngine } from './hooks/useAudioEngine';
 import './styles/wedding.css';
@@ -13,7 +12,6 @@ export const App: React.FC = () => {
     return window.location.hash.includes('kalyanam') ? 'kalyanam' : 'home';
   });
   const [isEntranceDismissed, setIsEntranceDismissed] = useState(false);
-  const [burstTrigger, setBurstTrigger] = useState<{ x: number; y: number; count: number } | null>(null);
 
   const { isPlaying, playTempleBell, startMusic, toggleMusic } = useAudioEngine();
 
@@ -43,10 +41,6 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const handlePetalBurst = useCallback((x: number, y: number, count: number) => {
-    setBurstTrigger({ x, y, count });
-  }, []);
-
   const handleAudioStart = useCallback(() => {
     startMusic();
     playTempleBell();
@@ -60,9 +54,6 @@ export const App: React.FC = () => {
 
   return (
     <div className="wedding-app-root">
-      {/* Canvas Layer for Floating Petals */}
-      <PetalCanvas burstTrigger={burstTrigger} />
-
       {/* Floating Audio Toggle */}
       <AudioToggle isPlaying={isPlaying} onToggle={toggleMusic} />
 
@@ -71,7 +62,6 @@ export const App: React.FC = () => {
         <WeddingEntrance
           data={weddingData}
           onAudioStart={handleAudioStart}
-          onPetalBurst={handlePetalBurst}
           onComplete={() => setIsEntranceDismissed(true)}
         />
       )}
@@ -81,13 +71,11 @@ export const App: React.FC = () => {
         <SacredKalyanamPage
           data={weddingData}
           onBack={() => navigateTo('home')}
-          onPetalBurst={handlePetalBurst}
         />
       ) : (
         <MainInvitation
           data={weddingData}
           onReplayEntry={handleReplayEntry}
-          onPetalBurst={handlePetalBurst}
           onNavigateToKalyanam={() => navigateTo('kalyanam')}
         />
       )}

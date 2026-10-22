@@ -6,14 +6,12 @@ import { WeddingData } from '../../data/weddingData';
 interface WeddingEntranceProps {
   data: WeddingData;
   onAudioStart: () => void;
-  onPetalBurst: (x: number, y: number, count: number) => void;
   onComplete: () => void;
 }
 
 export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
   data,
   onAudioStart,
-  onPetalBurst,
   onComplete
 }) => {
   const [isOpening, setIsOpening] = useState(false);
@@ -40,9 +38,8 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
   const handleOpenDoors = useCallback(() => {
     if (isOpening) return;
 
-    // 1. Start audio & celebratory petal burst (t = 0s)
+    // 1. Start audio & celebratory temple bells (t = 0s)
     onAudioStart();
-    onPetalBurst(window.innerWidth / 2, window.innerHeight * 0.45, 45);
 
     // 2. Doors begin physical 3D rotation outward (t = 0s)
     setIsOpening(true);
@@ -78,7 +75,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
     setTimeout(() => {
       handleProceedToInvitation();
     }, 4200);
-  }, [isOpening, onAudioStart, onPetalBurst, handleProceedToInvitation]);
+  }, [isOpening, onAudioStart, handleProceedToInvitation]);
 
   // Keyboard trigger (Enter, Space, ArrowDown)
   useEffect(() => {

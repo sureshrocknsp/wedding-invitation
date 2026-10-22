@@ -5,40 +5,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;800;900&family=Marcellus&family=Noto+Serif+Telugu:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Yatra+One&display=swap');
 
 :root {
-  /* Royal Wedding Palette */
-  --color-gold-light: #fae19c;
-  --color-gold-base: #dfa84a;
-  --color-gold-deep: #b38226;
-  --color-gold-dark: #7a530f;
-  --color-gold-gradient: linear-gradient(135deg, #fae19c 0%, #dfa84a 50%, #a8761e 100%);
-  --color-gold-shimmer: linear-gradient(90deg, #dfa84a 0%, #fff2c6 25%, #dfa84a 50%, #b38226 75%, #dfa84a 100%);
+  /* ==========================================================================
+     CORE WEDDING DESIGN TOKENS (PROMPT SPECIFICATION)
+     ========================================================================== */
+  --color-burgundy-deep: #26080D;
+  --color-wine-dark: #3B0B14;
+  --color-gold-antique: #C9A45C;
+  --color-champagne-soft: #E8D5A5;
+  --color-ivory-warm: #FFF8EC;
+  --color-text-secondary: #D7C8B9;
+  --color-border-subtle: rgba(201, 164, 92, 0.24);
 
-  --color-crimson-deep: #32040a;
-  --color-crimson-base: #640c18;
-  --color-crimson-light: #9e1b2b;
+  /* Primary Surfaces & Cards */
+  --color-bg-dark: var(--color-burgundy-deep);
+  --color-bg-primary: var(--color-burgundy-deep);
+  --color-bg-card: rgba(59, 11, 20, 0.88);
+  --color-bg-card-hover: rgba(59, 11, 20, 0.96);
+
+  /* Gold Shades */
+  --color-gold-light: var(--color-champagne-soft);
+  --color-gold-base: var(--color-gold-antique);
+  --color-gold-deep: #a8823d;
+  --color-gold-dark: #7a530f;
+  --color-gold-gradient: linear-gradient(135deg, #E8D5A5 0%, #C9A45C 50%, #9e7a36 100%);
+  --color-gold-shimmer: linear-gradient(90deg, #C9A45C 0%, #FFF8EC 30%, #E8D5A5 50%, #a8823d 75%, #C9A45C 100%);
+
+  /* Crimson & Wine */
+  --color-crimson-deep: var(--color-burgundy-deep);
+  --color-crimson-base: var(--color-wine-dark);
+  --color-crimson-light: #52101b;
 
   --color-marigold-yellow: #ffb703;
   --color-marigold-orange: #fb8500;
 
-  --color-sand-ivory: #fdfbf7;
-  --color-sand-cream: #f6efe2;
-  --color-sand-muted: #d0c2ae;
-  --color-bg-dark: #0a0405;
-  --color-bg-primary: #0a0405;
-  --color-bg-card: rgba(24, 8, 10, 0.86);
+  /* Typography Colors */
+  --color-sand-ivory: var(--color-ivory-warm);
+  --color-sand-cream: var(--color-champagne-soft);
+  --color-sand-muted: var(--color-text-secondary);
 
-  /* Typography */
+  /* Typography Families */
   --font-title: 'Cinzel Decorative', 'Cinzel', serif;
-  --font-serif: 'Cinzel', serif;
+  --font-serif: 'Cinzel', Georgia, serif;
   --font-accent: 'Marcellus', serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sanskrit: 'Yatra One', 'Cinzel', serif;
   --font-telugu: 'Noto Serif Telugu', 'Marcellus', serif;
 
-  /* Shadows */
-  --shadow-gold-sm: 0 2px 10px rgba(223, 168, 74, 0.25);
-  --shadow-gold-md: 0 8px 30px rgba(223, 168, 74, 0.4);
-  --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.8);
+  /* Refined Shadows */
+  --shadow-gold-sm: 0 2px 10px rgba(201, 164, 92, 0.18);
+  --shadow-gold-md: 0 8px 25px rgba(201, 164, 92, 0.28);
+  --shadow-deep: 0 16px 48px rgba(12, 3, 5, 0.78);
 
   --transition-smooth: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -52,6 +68,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  scroll-padding-top: 84px;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -59,27 +76,14 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-bg-dark);
   color: var(--color-sand-ivory);
-  line-height: 1.7;
+  line-height: 1.75;
   overflow-x: hidden;
   position: relative;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(100, 12, 24, 0.35) 0%, transparent 70%),
-    radial-gradient(circle at 100% 50%, rgba(223, 168, 74, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 0% 80%, rgba(100, 12, 24, 0.25) 0%, transparent 60%);
+    radial-gradient(circle at 50% 0%, rgba(59, 11, 20, 0.55) 0%, transparent 70%),
+    radial-gradient(circle at 100% 50%, rgba(201, 164, 92, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 0% 80%, rgba(59, 11, 20, 0.35) 0%, transparent 60%);
   background-attachment: fixed;
-}
-
-/* ==========================================================================
-   FLOATING CANVAS PETALS
-   ========================================================================== */
-.petal-canvas-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 99;
 }
 
 /* ==========================================================================
@@ -884,121 +888,219 @@ body {
 /* ==========================================================================
    TOP NAVIGATION BAR
    ========================================================================== */
+/* ==========================================================================
+   TOP NAVIGATION BAR
+   ========================================================================== */
 .top-nav-bar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  height: 72px;
   z-index: 90;
-  padding: 1.1rem 2rem;
+  padding: 0 1.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(10, 4, 5, 0.92);
+  background: rgba(38, 8, 13, 0.94);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(223, 168, 74, 0.22);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-shadow: 0 4px 20px rgba(12, 3, 5, 0.5);
+  box-sizing: border-box;
 }
 
 .nav-brand {
   font-family: var(--font-title);
-  font-size: 1.15rem;
-  color: var(--color-gold-light);
-  letter-spacing: 2px;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--color-champagne-soft);
+  letter-spacing: 1.8px;
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  flex-shrink: 0;
+  transition: var(--transition-smooth);
+}
+
+.nav-brand:hover {
+  color: var(--color-ivory-warm);
+}
+
+.nav-diya {
+  font-size: 1.15rem;
+}
+
+.nav-brand-text {
+  white-space: nowrap;
 }
 
 .nav-links-desktop {
   display: flex;
   align-items: center;
-  gap: 1.8rem;
+  gap: 1.35rem;
 }
 
 .nav-link {
   color: var(--color-sand-cream);
   text-decoration: none;
   font-family: var(--font-serif);
-  font-size: 0.85rem;
-  letter-spacing: 1.5px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
   position: relative;
+  padding: 0.4rem 0.2rem;
   transition: var(--transition-smooth);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-gold-base);
+  transition: width 0.3s ease;
 }
 
 .nav-link:hover {
   color: var(--color-gold-light);
 }
 
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.nav-page-btn {
+  background: rgba(201, 164, 92, 0.12);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  cursor: pointer;
+  color: var(--color-gold-light);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.nav-link.nav-page-btn:hover {
+  background: rgba(201, 164, 92, 0.22);
+  border-color: var(--color-gold-base);
+  color: var(--color-ivory-warm);
+}
+
+.nav-link.nav-page-btn::after {
+  display: none;
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.75rem;
 }
 
-.side-menu-trigger-btn {
+.nav-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
-  background: rgba(100, 12, 24, 0.45);
-  border: 1.5px solid var(--color-gold-base);
-  color: var(--color-gold-light);
+  justify-content: center;
+  gap: 0.4rem;
   font-family: var(--font-serif);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 0.5rem 1.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-decoration: none;
+  padding: 0.45rem 1rem;
   border-radius: 30px;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: var(--transition-smooth);
+  box-sizing: border-box;
+}
+
+.replay-btn {
+  background: rgba(59, 11, 20, 0.6);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-champagne-soft);
+}
+
+.replay-btn:hover {
+  background: rgba(201, 164, 92, 0.2);
+  border-color: var(--color-gold-antique);
+  color: var(--color-ivory-warm);
+}
+
+.rsvp-nav-btn {
+  background: var(--color-gold-gradient);
+  color: var(--color-burgundy-deep);
+  font-weight: 700;
+  border: 1px solid var(--color-champagne-soft);
+  box-shadow: 0 2px 10px rgba(201, 164, 92, 0.25);
+}
+
+.rsvp-nav-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(201, 164, 92, 0.4);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: rgba(59, 11, 20, 0.7);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--color-champagne-soft);
   transition: var(--transition-smooth);
 }
 
-.side-menu-trigger-btn:hover {
-  background: var(--color-gold-gradient);
-  color: #14080a;
-  border-color: var(--color-gold-light);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(223, 168, 74, 0.5);
+.mobile-menu-btn:hover {
+  border-color: var(--color-gold-antique);
+  background: rgba(59, 11, 20, 0.95);
 }
 
-.side-menu-bars {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.mobile-menu-btn:focus-visible {
+  outline: 2px solid var(--color-gold-antique);
+  outline-offset: 2px;
 }
 
-.side-menu-bars span {
+.hamburger-line {
   display: block;
-  width: 18px;
+  width: 20px;
   height: 2px;
   background: currentColor;
   border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-.side-nav-backdrop {
+.mobile-nav-backdrop, .side-nav-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(6px);
+  background: rgba(12, 3, 5, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 140;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
 }
 
-.side-nav-backdrop.active {
+.mobile-nav-backdrop.active, .side-nav-backdrop.active {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* Side Menu Drawer */
+/* Side Menu / Mobile Nav Drawer */
 .mobile-nav-drawer, .side-nav-drawer {
   position: fixed;
   top: 0;
@@ -1006,16 +1108,17 @@ body {
   width: 320px;
   max-width: 88vw;
   height: 100vh;
-  background: linear-gradient(180deg, #18080c 0%, #0e0305 100%);
-  border-left: 1.5px solid rgba(223, 168, 74, 0.35);
+  background: linear-gradient(180deg, #3B0B14 0%, #26080D 100%);
+  border-left: 1px solid var(--color-border-subtle);
   z-index: 150;
-  padding: 1.8rem 1.5rem;
+  padding: 1.8rem 1.4rem;
   display: flex;
   flex-direction: column;
   box-shadow: -15px 0 45px rgba(0, 0, 0, 0.85);
   transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 
 .mobile-nav-drawer.active, .side-nav-drawer.active {
@@ -1026,8 +1129,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 1.2rem;
-  border-bottom: 1px solid rgba(223, 168, 74, 0.25);
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--color-border-subtle);
   margin-bottom: 1.2rem;
 }
 
@@ -1043,13 +1146,13 @@ body {
 
 .mobile-nav-close:hover {
   transform: rotate(90deg) scale(1.15);
-  color: #fff;
+  color: var(--color-ivory-warm);
 }
 
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
 
 .mobile-nav-link {
@@ -1058,8 +1161,8 @@ body {
   font-family: var(--font-serif);
   font-size: 0.95rem;
   letter-spacing: 0.8px;
-  padding: 0.6rem 0.6rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid rgba(201, 164, 92, 0.12);
   border-radius: 8px;
   transition: var(--transition-smooth);
   text-align: left;
@@ -1067,8 +1170,8 @@ body {
 
 .mobile-nav-link:hover {
   color: var(--color-gold-light);
-  background: rgba(223, 168, 74, 0.08);
-  padding-left: 0.9rem;
+  background: rgba(201, 164, 92, 0.1);
+  padding-left: 1.1rem;
 }
 
 .mobile-nav-btn-link {
@@ -1080,8 +1183,8 @@ body {
 
 .replay-drawer-btn {
   margin-top: 0.6rem;
-  background: rgba(100, 12, 24, 0.45) !important;
-  border: 1px solid rgba(223, 168, 74, 0.45) !important;
+  background: rgba(59, 11, 20, 0.7) !important;
+  border: 1px solid var(--color-border-subtle) !important;
   color: var(--color-gold-light) !important;
   font-weight: 700;
   text-align: center;
@@ -1091,34 +1194,40 @@ body {
 
 .replay-drawer-btn:hover {
   background: var(--color-gold-gradient) !important;
-  color: #14080a !important;
+  color: var(--color-burgundy-deep) !important;
 }
 
 /* ==========================================================================
-   FLOATING AUDIO CONTROLLER
+   FLOATING AUDIO CONTROLLER (RESTRAINED & SAFE AREA AWARE)
    ========================================================================== */
 .floating-audio-control {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 95;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  z-index: 85;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  background: rgba(20, 8, 10, 0.88);
-  border: 1px solid var(--color-gold-base);
-  padding: 0.6rem 1.1rem;
+  gap: 0.75rem;
+  background: rgba(38, 8, 13, 0.88);
+  border: 1px solid var(--color-border-subtle);
+  padding: 0.5rem 1rem;
   border-radius: 40px;
   backdrop-filter: blur(14px);
-  box-shadow: var(--shadow-deep), var(--shadow-gold-sm);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   transition: var(--transition-smooth);
 }
 
 .floating-audio-control:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-deep), var(--shadow-gold-md);
-  border-color: var(--color-gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(201, 164, 92, 0.25);
+  border-color: var(--color-gold-antique);
+}
+
+.floating-audio-control:focus-visible {
+  outline: 2px solid var(--color-gold-antique);
+  outline-offset: 3px;
 }
 
 .music-disc-icon {
@@ -1492,39 +1601,51 @@ body {
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 0.85rem 2rem;
+  padding: 0.85rem 1.8rem;
   min-height: 48px;
   border-radius: 40px;
   cursor: pointer;
   transition: var(--transition-smooth);
   box-sizing: border-box;
+  text-decoration: none;
 }
 
 .primary-btn {
   background: var(--color-gold-gradient);
-  color: #14080a;
-  border: 1px solid var(--color-gold-light);
-  box-shadow: 0 5px 25px rgba(223, 168, 74, 0.45);
+  color: var(--color-burgundy-deep);
+  border: 1px solid var(--color-champagne-soft);
+  box-shadow: 0 4px 18px rgba(201, 164, 92, 0.3);
 }
 
 .primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(223, 168, 74, 0.7);
+  box-shadow: 0 6px 24px rgba(201, 164, 92, 0.48);
+  filter: brightness(1.06);
+}
+
+.primary-btn:focus-visible {
+  outline: 2px solid var(--color-gold-antique);
+  outline-offset: 3px;
 }
 
 .secondary-btn {
-  background: rgba(100, 12, 24, 0.6);
-  border: 1.5px solid var(--color-gold-base);
-  color: var(--color-gold-light);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  background: rgba(59, 11, 20, 0.7);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-champagne-soft);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .secondary-btn:hover {
-  background: rgba(120, 15, 30, 0.85);
-  border-color: var(--color-gold-light);
-  color: #fff;
+  background: rgba(59, 11, 20, 0.95);
+  border-color: var(--color-gold-antique);
+  color: var(--color-ivory-warm);
   transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(223, 168, 74, 0.4);
+  box-shadow: 0 6px 22px rgba(201, 164, 92, 0.25);
+}
+
+.secondary-btn:focus-visible {
+  outline: 2px solid var(--color-gold-antique);
+  outline-offset: 3px;
 }
 
 /* 1.5 Divine Muhurtham Blessing Section (Moved Up) */
@@ -2342,25 +2463,30 @@ body {
   margin-bottom: 2rem;
 }
 
-.flower-shower-interactive-btn {
+.mangalam-blessings-cta {
   background: var(--color-gold-gradient);
-  color: #14080a;
+  color: var(--color-burgundy-deep);
   font-family: var(--font-serif);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 1rem 2.6rem;
+  padding: 0.95rem 2.2rem;
   border-radius: 50px;
-  border: none;
+  border: 1px solid var(--color-champagne-soft);
   cursor: pointer;
-  box-shadow: 0 6px 30px rgba(223, 168, 74, 0.55);
+  box-shadow: 0 4px 20px rgba(201, 164, 92, 0.35);
   transition: var(--transition-smooth);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.flower-shower-interactive-btn:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 12px 40px rgba(223, 168, 74, 0.85);
+.mangalam-blessings-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(201, 164, 92, 0.55);
+  filter: brightness(1.08);
 }
 
 /* Footer */
@@ -3403,10 +3529,10 @@ body {
   text-overflow: ellipsis;
 }
 
-.flower-shower-nav-btn {
-  background: rgba(100, 12, 24, 0.5);
-  border: 1px solid rgba(223, 168, 74, 0.4);
-  color: #fff;
+.kalyanam-nav-action-btn {
+  background: rgba(59, 11, 20, 0.7);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-champagne-soft);
   padding: 0.5rem 1.1rem;
   border-radius: 50px;
   font-weight: 600;
@@ -3414,9 +3540,9 @@ body {
   transition: var(--transition-smooth);
 }
 
-.flower-shower-nav-btn:hover {
+.kalyanam-nav-action-btn:hover {
   background: var(--color-gold-gradient);
-  color: #14080a;
+  color: var(--color-burgundy-deep);
 }
 
 .kalyanam-page-container {
@@ -3497,7 +3623,8 @@ body {
    RESPONSIVE BREAKPOINTS
    ========================================================================== */
 @media (max-width: 1023px) {
-  .nav-links-desktop { display: none; }
+  .nav-links-desktop { display: none !important; }
+  .mobile-menu-btn { display: inline-flex !important; }
   .couple-grid, .rsvp-layout-grid, .venue-card-wrapper, .invites-and-wishers-grid { grid-template-columns: 1fr; gap: 2rem; }
   .pillars-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
   .card-replica-footer-row { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
@@ -3686,7 +3813,7 @@ body {
   .kalyanam-page-nav { padding: 0.65rem 0.9rem; gap: 0.4rem; }
   .kalyanam-brand { font-size: 0.85rem; max-width: 42%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .back-to-invite-btn { padding: 0.42rem 0.8rem; font-size: 0.8rem; }
-  .flower-shower-nav-btn { padding: 0.42rem 0.8rem; font-size: 0.8rem; }
+  .kalyanam-nav-action-btn { padding: 0.42rem 0.8rem; font-size: 0.8rem; }
   .kalyanam-page-container { padding: 1.2rem 0.85rem 3.5rem; max-width: 100vw; box-sizing: border-box; overflow-x: hidden; }
   .kalyanam-page-title { font-size: clamp(1.35rem, 5.5vw, 1.8rem); line-height: 1.35; }
   .vow-step-card { padding: 1.1rem 0.95rem; gap: 0.85rem; }
@@ -3739,6 +3866,27 @@ body {
   .kalyanam-brand { display: none; }
   .kalyanam-page-nav { justify-content: space-between; }
   .back-to-invite-btn { font-size: 0.78rem; padding: 0.4rem 0.7rem; }
-  .flower-shower-nav-btn { font-size: 0.78rem; padding: 0.4rem 0.7rem; }
+  .kalyanam-nav-action-btn { font-size: 0.78rem; padding: 0.4rem 0.7rem; }
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION SUPPORT
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .portal-door-panel {
+    transform: none !important;
+  }
+
+  .mandapam-interior-scene {
+    opacity: 1 !important;
+  }
+}
+
 

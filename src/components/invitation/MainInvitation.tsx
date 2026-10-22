@@ -4,14 +4,12 @@ import { WeddingData } from '../../data/weddingData';
 interface MainInvitationProps {
   data: WeddingData;
   onReplayEntry: () => void;
-  onPetalBurst: (x: number, y: number, count: number) => void;
   onNavigateToKalyanam: () => void;
 }
 
 export const MainInvitation: React.FC<MainInvitationProps> = ({
   data,
   onReplayEntry,
-  onPetalBurst,
   onNavigateToKalyanam
 }) => {
   // Countdown state
@@ -27,6 +25,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   const [rsvpMessage, setRsvpMessage] = useState('');
   const [rsvpNameError, setRsvpNameError] = useState(false);
   const [blessings, setBlessings] = useState(data.rsvp.initialBlessings);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Personalized guest greeting from URL (?guest= or ?to=)
   const [guestParam, setGuestParam] = useState<string | null>(null);
@@ -96,8 +95,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       localStorage.setItem('wedding_blessings_react_v1', JSON.stringify(updated));
     } catch {}
 
-    onPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 70);
-
     alert(
       `✨ ధన్యవాదాలు (Thank you), ${rsvpName}! ✨\n\nYour warm blessings for Lahari & Shiva Kumar have been received with joyful gratitude!`
     );
@@ -148,7 +145,123 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             Lahari & Shiva Kumar
           </span>
         </a>
+
+        <nav className="nav-links-desktop">
+          <a href="#heroInvitation" className="nav-link">Home</a>
+          <a href="#coupleSection" className="nav-link">Couple</a>
+          <button
+            onClick={onNavigateToKalyanam}
+            className="nav-link nav-page-btn"
+            type="button"
+            title="Open Dedicated Page: The Sacred Essence of Telugu Kalyanam & 7 Vows"
+          >
+            ✨ Sacred Kalyanam
+          </button>
+          <a href="#wellWishersSection" className="nav-link">Family</a>
+          <a href="#ritualsSection" className="nav-link">Rituals</a>
+          <a href="#itinerarySection" className="nav-link">Schedule</a>
+          <a href="#venueSection" className="nav-link">Venue</a>
+          <a href="#gallerySection" className="nav-link">Gallery</a>
+          <a href="#rsvpSection" className="nav-link">RSVP</a>
+        </nav>
+
+        <div className="nav-actions">
+          <button
+            onClick={onReplayEntry}
+            className="nav-btn replay-btn"
+            type="button"
+            title="Replay Entrance"
+          >
+            <span>🎬 Replay</span>
+          </button>
+          <a href="#rsvpSection" className="nav-btn rsvp-nav-btn">
+            RSVP
+          </a>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="mobile-menu-btn"
+            type="button"
+            aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+            aria-expanded={mobileMenuOpen}
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+        </div>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      <div
+        className={`mobile-nav-backdrop ${mobileMenuOpen ? 'active' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+        aria-hidden={!mobileMenuOpen}
+      ></div>
+
+      <aside
+        className={`mobile-nav-drawer ${mobileMenuOpen ? 'active' : ''}`}
+        aria-label="Mobile Navigation Menu"
+      >
+        <div className="mobile-nav-header">
+          <span className="nav-brand-text">
+            Lahari & Shiva Kumar
+          </span>
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="mobile-nav-close"
+            type="button"
+            aria-label="Close menu"
+          >
+            &times;
+          </button>
+        </div>
+        <nav className="mobile-nav-links">
+          <a href="#heroInvitation" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            🪷 Home & Invitation
+          </a>
+          <a href="#coupleSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            👑 The Couple & Lineage
+          </a>
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onNavigateToKalyanam();
+            }}
+            className="mobile-nav-link mobile-nav-btn-link"
+            type="button"
+          >
+            🔥 వివాహ విశిష్టత & సప్తపది (Dedicated Page) →
+          </button>
+          <a href="#wellWishersSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            💐 Family & Near and Dear
+          </a>
+          <a href="#ritualsSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            🪔 Sacred Rituals
+          </a>
+          <a href="#itinerarySection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            📅 Event Schedule
+          </a>
+          <a href="#venueSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            🏛️ Kalyana Vedika (Venue)
+          </a>
+          <a href="#gallerySection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            📸 Photo Gallery
+          </a>
+          <a href="#rsvpSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+            💌 Send Blessings / RSVP
+          </a>
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onReplayEntry();
+            }}
+            className="mobile-nav-link mobile-nav-btn-link replay-drawer-btn"
+            type="button"
+          >
+            🎬 Replay Cinematic Entry
+          </button>
+        </nav>
+      </aside>
 
       {/* 1. HERO INVITATION SECTION */}
       <section
@@ -745,13 +858,12 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               </span>
             </p>
 
-            <button
-              onClick={(e) => onPetalBurst(e.clientX, e.clientY, 60)}
-              className="flower-shower-interactive-btn"
-              type="button"
+            <a
+              href="#rsvpSection"
+              className="primary-btn mangalam-blessings-cta"
             >
-              <span>🌸 Shower Holy Petals & Bless 🌸</span>
-            </button>
+              <span>🙏 Post Your Sacred Blessings for the Couple 🙏</span>
+            </a>
           </div>
         </div>
       </section>

@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { WeddingInterior } from './WeddingInterior';
 import { WeddingDoors } from './WeddingDoors';
-import { CoupleNamesReveal } from './CoupleNamesReveal';
 import { WeddingData } from '../../data/weddingData';
 
 interface WeddingEntranceProps {
@@ -25,7 +24,6 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
   const [isVinayakaFaded, setIsVinayakaFaded] = useState(false);
   const [isMandapamRevealed, setIsMandapamRevealed] = useState(false);
   const [isSettled, setIsSettled] = useState(false);
-  const [isNamesRevealed, setIsNamesRevealed] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
 
   const handleProceedToInvitation = useCallback(() => {
@@ -76,11 +74,11 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
       setIsSettled(true);
     }, 3600);
 
-    // 8. AFTER Vinayaka fades, the below one (Couple Names card) comes! (t = 4.4s)
+    // 8. Seamlessly glide directly into the main wedding invitation (t = 4.2s)
     setTimeout(() => {
-      setIsNamesRevealed(true);
-    }, 4400);
-  }, [isOpening, onAudioStart, onPetalBurst]);
+      handleProceedToInvitation();
+    }, 4200);
+  }, [isOpening, onAudioStart, onPetalBurst, handleProceedToInvitation]);
 
   // Keyboard trigger (Enter, Space, ArrowDown)
   useEffect(() => {
@@ -156,6 +154,8 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
       onClick={() => {
         if (!isOpening) {
           handleOpenDoors();
+        } else {
+          handleProceedToInvitation();
         }
       }}
       aria-label="Cinematic Hindu Wedding Entrance and Reveal"
@@ -178,15 +178,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
         onTapToEnter={handleOpenDoors}
       />
 
-      {/* Layer 3: Couple Names Reveal Card (Only appears after Mandapam & Vinayaka settle) */}
-      <CoupleNamesReveal
-        isRevealed={isNamesRevealed}
-        brideName={data.couple.bride.name}
-        groomName={data.couple.groom.name}
-        teluguNames={`${data.couple.bride.teluguName} పరిణయం ${data.couple.groom.teluguName}`}
-        onProceed={handleProceedToInvitation}
-        autoProceedSeconds={4}
-      />
+
 
       {/* Prominent, accessible Skip button whenever doors are opening */}
       {isOpening && (

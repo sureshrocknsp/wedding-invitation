@@ -19,89 +19,96 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
         isGoldenLightActive ? 'golden-light-active' : ''
       } ${isDoorOpen ? 'doors-opened' : ''}`}
     >
-      {/* 3D Hinged Perspective Viewport Container (perspective: 1800px) */}
-      <div className="doors-perspective-viewport">
-        {/* LEFT DOOR LEAF (Hinged on Left, 3D outward rotation to Left) */}
-        <div className="door-panel-hinged door-hinged-left" id="doorLeafLeft">
-          <div className="door-panel-inner">
-            <div
-              className="door-texture-layer texture-left"
-              style={{ backgroundImage: `url('/assets/images/grand_doors.jpg')` }}
-            ></div>
-            <div className="door-depth-shade shade-left"></div>
-            <div className="door-edge-brass-trim trim-right"></div>
+      <div className="grand-portal-stage">
+        {/* Ambient atmospheric backdrop extension for ultra-wide and mobile screens */}
+        <div className="portal-ambient-backdrop" aria-hidden="true"></div>
+
+        {/* The Grand Architectural Temple Portal (963 x 542 aspect ratio) */}
+        <div className="grand-portal-proscenium">
+          {/* 1. Behind the frame: 3D Hinged Double Doors in the Doorway Opening */}
+          <div className="portal-doorway-chamber">
+            <div className="portal-doors-hinge-viewport">
+              {/* LEFT DOOR LEAF */}
+              <div className="portal-door-panel door-leaf-left" id="doorLeafLeft">
+                <img
+                  src="/assets/images/door_leaf_left.jpg"
+                  alt="Left Door"
+                  className="door-leaf-img"
+                  draggable={false}
+                />
+                <div className="door-panel-shade shade-left"></div>
+                <div className="door-edge-brass trim-right"></div>
+              </div>
+
+              {/* RIGHT DOOR LEAF */}
+              <div className="portal-door-panel door-leaf-right" id="doorLeafRight">
+                <img
+                  src="/assets/images/door_leaf_right.jpg"
+                  alt="Right Door"
+                  className="door-leaf-img"
+                  draggable={false}
+                />
+                <div className="door-panel-shade shade-right"></div>
+                <div className="door-edge-brass trim-left"></div>
+              </div>
+
+              {/* Divine Golden Light Beam through the center door seam */}
+              <div
+                className={`portal-door-seam ${isGoldenLightActive ? 'light-bursting' : ''}`}
+                aria-hidden="true"
+              >
+                <div className="seam-volumetric-flare"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. In front of the doors: The Grand Portal Frame with transparent doorway */}
+          <img
+            src="/assets/images/grand_doors_portal_frame.png"
+            alt="Grand Entrance Portal"
+            className="portal-proscenium-frame-img"
+            draggable={false}
+          />
+
+          {/* 3. Living temple effects: Flickering flames on the left & right brass oil lamps */}
+          <div className="portal-flame-anchor flame-anchor-left" aria-hidden="true">
+            <div className="lamp-flame-core"></div>
+            <div className="lamp-flame-glow"></div>
+          </div>
+          <div className="portal-flame-anchor flame-anchor-right" aria-hidden="true">
+            <div className="lamp-flame-core"></div>
+            <div className="lamp-flame-glow"></div>
           </div>
         </div>
 
-        {/* RIGHT DOOR LEAF (Hinged on Right, 3D outward rotation to Right) */}
-        <div className="door-panel-hinged door-hinged-right" id="doorLeafRight">
-          <div className="door-panel-inner">
-            <div
-              className="door-texture-layer texture-right"
-              style={{ backgroundImage: `url('/assets/images/grand_doors.jpg')` }}
-            ></div>
-            <div className="door-depth-shade shade-right"></div>
-            <div className="door-edge-brass-trim trim-left"></div>
+        {/* 4. Elegant, Royal "TAP TO ENTER" Indicator */}
+        {!isOpening && (
+          <div
+            className="tap-to-enter-pill"
+            onClick={onTapToEnter}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onTapToEnter();
+              }
+            }}
+            aria-label="Tap to enter wedding venue"
+          >
+            <div className="tap-badge-content">
+              <span className="tap-diya-icon">🪔</span>
+              <span className="tap-badge-text">TAP TO ENTER</span>
+              <span className="tap-diya-icon">🪔</span>
+            </div>
+            <p className="tap-badge-sub">Click anywhere or press Enter to step into the celebration</p>
           </div>
-        </div>
-
-        {/* Thin Warm Golden Light Seam between the doors */}
-        <div className={`door-gap-golden-seam ${isGoldenLightActive ? 'light-bursting' : ''}`} aria-hidden="true">
-          <div className="seam-volumetric-flare"></div>
-        </div>
+        )}
       </div>
-
-      {/* Foreground Ambient Layer: Subtle garland sway, brass lamp flickers, floor reflection */}
-      <div className="entrance-foreground-layer" aria-hidden="true">
-        {/* Subtle floral canopy ambient accents */}
-        <div className="ambient-floral-canopy-accents">
-          <div className="swaying-garland garland-left"></div>
-          <div className="swaying-garland garland-center"></div>
-          <div className="swaying-garland garland-right"></div>
-        </div>
-
-        {/* Flanking Brass Kuthu Vilakku Lamps with gentle flame flickers */}
-        <div className="entrance-foreground-lamps">
-          <div className="entrance-lamp lamp-flank-left">
-            <div className="entrance-lamp-flame"></div>
-            <div className="entrance-lamp-glow"></div>
-          </div>
-          <div className="entrance-lamp lamp-flank-right">
-            <div className="entrance-lamp-flame"></div>
-            <div className="entrance-lamp-glow"></div>
-          </div>
-        </div>
-
-        {/* Polished Floor Floral Pathway Warm Reflection */}
-        <div className="entrance-floor-pathway-lighting"></div>
-      </div>
-
-      {/* Elegant, Non-intrusive "TAP TO ENTER" Indicator with subtle breathing */}
-      {!isOpening && (
-        <div
-          className="tap-to-enter-pill"
-          onClick={onTapToEnter}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onTapToEnter();
-            }
-          }}
-          aria-label="Tap to enter wedding venue"
-        >
-          <div className="tap-badge-content">
-            <span className="tap-diya-icon">🪔</span>
-            <span className="tap-badge-text">TAP TO ENTER</span>
-            <span className="tap-diya-icon">🪔</span>
-          </div>
-          <p className="tap-badge-sub">Click anywhere or press Enter to step into the celebration</p>
-        </div>
-      )}
     </div>
   );
 };
+
 
 
 

@@ -29,7 +29,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   const [rsvpMessage, setRsvpMessage] = useState('');
   const [rsvpNameError, setRsvpNameError] = useState(false);
   const [blessings, setBlessings] = useState(data.rsvp.initialBlessings);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Personalized guest greeting from URL (?guest= or ?to=)
   const [guestParam, setGuestParam] = useState<string | null>(null);
@@ -155,94 +154,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             Lahari & Shiva Kumar
           </span>
         </a>
-
-
-        <div className="nav-actions">
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="side-menu-trigger-btn"
-            type="button"
-            aria-label="Open Side Menu"
-            title="Open Full Navigation Menu"
-          >
-            <span className="side-menu-bars" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
-            <span className="side-menu-text">Menu</span>
-          </button>
-        </div>
       </header>
-
-      {/* Side Menu Drawer Backdrop & Drawer Panel */}
-      <div
-        className={`side-nav-backdrop ${mobileMenuOpen ? 'active' : ''}`}
-        onClick={() => setMobileMenuOpen(false)}
-        aria-hidden={!mobileMenuOpen}
-      ></div>
-
-      <div className={`mobile-nav-drawer side-nav-drawer ${mobileMenuOpen ? 'active' : ''}`}>
-        <div className="mobile-nav-header">
-          <span className="nav-brand-text">
-            Lahari & Shiva Kumar
-          </span>
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="mobile-nav-close"
-            type="button"
-            aria-label="Close menu"
-          >
-            &times;
-          </button>
-        </div>
-        <nav className="mobile-nav-links">
-          <a href="#heroInvitation" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            🪷 Home & Invitation
-          </a>
-          <a href="#coupleSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            👑 The Couple & Lineage
-          </a>
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onNavigateToKalyanam();
-            }}
-            className="mobile-nav-link mobile-nav-btn-link"
-            type="button"
-          >
-            🔥 వివాహ విశిష్టత & సప్తపది (Dedicated Page) →
-          </button>
-          <a href="#wellWishersSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            💐 Family & Near and Dear
-          </a>
-          <a href="#ritualsSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            🪔 Sacred Rituals
-          </a>
-          <a href="#itinerarySection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            📅 Event Schedule
-          </a>
-          <a href="#venueSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            🏛️ Kalyana Vedika (Venue)
-          </a>
-          <a href="#gallerySection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            📸 Photo Gallery
-          </a>
-          <a href="#rsvpSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            💌 Send Blessings / RSVP
-          </a>
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onReplayEntry();
-            }}
-            className="mobile-nav-link mobile-nav-btn-link replay-drawer-btn"
-            type="button"
-          >
-            🎬 Replay Cinematic Entry
-          </button>
-        </nav>
-      </div>
 
       {/* 1. HERO INVITATION SECTION */}
       <section

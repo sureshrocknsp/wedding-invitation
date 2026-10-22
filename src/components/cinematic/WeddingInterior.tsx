@@ -36,8 +36,6 @@ export const WeddingInterior: React.FC<WeddingInteriorProps> = ({
         />
         <div className="mandapam-cinematic-vignette"></div>
         <div className="mandapam-ambient-warmth"></div>
-        {/* Soft veil after Vinayaka fades so couple names card has clear focus */}
-        <div className={`mandapam-names-veil ${isVinayakaFaded ? 'active' : ''}`}></div>
       </div>
 
       {/* Volumetric Warm Golden Ambient Lighting */}

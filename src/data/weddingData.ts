@@ -315,6 +315,18 @@ export const weddingData: WeddingData = {
       category: "Invitation"
     },
     {
+      src: "/assets/images/grand_doors.jpg",
+      title: "మంగళ తోరణ మహద్వారం (Grand Royal Entrance)",
+      caption: "Temple Architecture Entrance with Handcrafted Teak Doors, Jasmine Toranam & Rangoli",
+      category: "Entrance"
+    },
+    {
+      src: "/assets/images/vinayaka_mandapam.jpg",
+      title: "శ్రీ వినాయక దివ్య కళ్యాణ మండపం (Vinayaka Kalyana Mandapam)",
+      caption: "Lord Vinayaka in Grand Traditional Floral Mandapam with Brass Diyas",
+      category: "Mandapam"
+    },
+    {
       src: "/assets/images/divine_blessings.jpg",
       title: "సర్వదేవతా ఆశీర్వచనం (Divine Celestial Blessings)",
       caption: "Deities Showering Sacred Akshatas & Flowers upon the Couple",

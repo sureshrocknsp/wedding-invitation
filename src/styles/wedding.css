@@ -431,36 +431,17 @@ body {
   z-index: 1;
 }
 
-/* The Grand Architectural Temple Portal Proscenium (963 x 542 aspect ratio) */
+/* Full-screen responsive cinematic cover for the grand entrance portal (Image A) */
 .grand-portal-proscenium {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  max-width: calc(100vh * (963 / 542));
-  max-height: calc(100vw * (542 / 963));
+  width: max(100vw, calc(100vh * (963 / 542)));
+  height: max(100vh, calc(100vw * (542 / 963)));
   aspect-ratio: 963 / 542;
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.9);
   z-index: 2;
   transform-style: preserve-3d;
   user-select: none;
-}
-
-@media (max-aspect-ratio: 963/542) {
-  .grand-portal-proscenium {
-    width: 100vw;
-    height: calc(100vw * (542 / 963));
-    max-width: 100vw;
-    max-height: none;
-  }
-}
-
-@media (min-aspect-ratio: 963/542) {
-  .grand-portal-proscenium {
-    height: 100vh;
-    width: calc(100vh * (963 / 542));
-    max-height: 100vh;
-    max-width: none;
-  }
+  flex-shrink: 0;
 }
 
 /* The Grand Portal Frame Image (Foreground Pillars, Garlands, Toranam, Floor Rangoli) */
@@ -723,19 +704,20 @@ body {
    -------------------------------------------------------------------------- */
 .couple-names-sanctum-card {
   position: absolute;
-  bottom: 6%;
+  bottom: 5%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
   width: 90%;
-  max-width: 680px;
+  max-width: 660px;
   text-align: center;
-  background: linear-gradient(180deg, rgba(12, 4, 6, 0.4) 0%, rgba(12, 4, 6, 0.92) 40%, rgba(12, 4, 6, 0.98) 100%);
-  padding: 2.2rem 2rem 1.8rem;
+  background: linear-gradient(180deg, rgba(38, 8, 13, 0.6) 0%, rgba(38, 8, 13, 0.94) 35%, rgba(20, 4, 7, 0.98) 100%);
+  padding: 2rem 2rem 1.6rem;
   border-radius: 24px;
-  border: 1px solid rgba(223, 168, 74, 0.4);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(223, 168, 74, 0.3);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.85), 0 0 30px rgba(201, 164, 92, 0.22);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .animate-card-fade-in {
@@ -790,7 +772,7 @@ body {
   font-size: 0.9rem;
   color: var(--color-sand-muted);
   line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.4rem;
 }
 
 .enter-invitation-btn {
@@ -798,24 +780,24 @@ body {
   align-items: center;
   gap: 0.8rem;
   background: var(--color-gold-gradient);
-  color: #14080a;
+  color: var(--color-burgundy-deep);
   font-family: var(--font-serif);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
   padding: 0.95rem 2.4rem;
   border-radius: 50px;
-  border: none;
+  border: 1px solid var(--color-champagne-soft);
   cursor: pointer;
-  box-shadow: 0 6px 30px rgba(223, 168, 74, 0.55);
+  box-shadow: 0 4px 20px rgba(201, 164, 92, 0.4);
   transition: var(--transition-smooth);
 }
 
 .enter-invitation-btn:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 12px 40px rgba(223, 168, 74, 0.8);
-  background: linear-gradient(135deg, #fff2c6 0%, #dfa84a 50%, #b38226 100%);
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 8px 30px rgba(201, 164, 92, 0.65);
 }
 
 .cinematic-skip-btn {

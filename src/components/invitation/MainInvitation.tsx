@@ -25,7 +25,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   const [rsvpMessage, setRsvpMessage] = useState('');
   const [rsvpNameError, setRsvpNameError] = useState(false);
   const [blessings, setBlessings] = useState(data.rsvp.initialBlessings);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Personalized guest greeting from URL (?guest= or ?to=)
   const [guestParam, setGuestParam] = useState<string | null>(null);
@@ -137,132 +136,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
   return (
     <div className="main-invitation-wrapper" id="mainInvitationContent">
-      {/* Top Glassmorphic Navigation Bar */}
-      <header className="top-nav-bar" id="topNavBar">
-        <a href="#heroInvitation" className="nav-brand">
-          <span className="nav-diya">🪔</span>
-          <span className="nav-brand-text">
-            Lahari & Shiva Kumar
-          </span>
-        </a>
-
-        <nav className="nav-links-desktop">
-          <a href="#heroInvitation" className="nav-link">Home</a>
-          <a href="#coupleSection" className="nav-link">Couple</a>
-          <button
-            onClick={onNavigateToKalyanam}
-            className="nav-link nav-page-btn"
-            type="button"
-            title="Open Dedicated Page: The Sacred Essence of Telugu Kalyanam & 7 Vows"
-          >
-            ✨ Sacred Kalyanam
-          </button>
-          <a href="#wellWishersSection" className="nav-link">Family</a>
-          <a href="#ritualsSection" className="nav-link">Rituals</a>
-          <a href="#itinerarySection" className="nav-link">Schedule</a>
-          <a href="#venueSection" className="nav-link">Venue</a>
-          <a href="#gallerySection" className="nav-link">Gallery</a>
-          <a href="#rsvpSection" className="nav-link">RSVP</a>
-        </nav>
-
-        <div className="nav-actions">
-          <button
-            onClick={onReplayEntry}
-            className="nav-btn replay-btn"
-            type="button"
-            title="Replay Entrance"
-          >
-            <span>🎬 Replay</span>
-          </button>
-          <a href="#rsvpSection" className="nav-btn rsvp-nav-btn">
-            RSVP
-          </a>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="mobile-menu-btn"
-            type="button"
-            aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
-            aria-expanded={mobileMenuOpen}
-          >
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Navigation Drawer */}
-      <div
-        className={`mobile-nav-backdrop ${mobileMenuOpen ? 'active' : ''}`}
-        onClick={() => setMobileMenuOpen(false)}
-        aria-hidden={!mobileMenuOpen}
-      ></div>
-
-      <aside
-        className={`mobile-nav-drawer ${mobileMenuOpen ? 'active' : ''}`}
-        aria-label="Mobile Navigation Menu"
-      >
-        <div className="mobile-nav-header">
-          <span className="nav-brand-text">
-            Lahari & Shiva Kumar
-          </span>
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="mobile-nav-close"
-            type="button"
-            aria-label="Close menu"
-          >
-            &times;
-          </button>
-        </div>
-        <nav className="mobile-nav-links">
-          <a href="#heroInvitation" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            🪷 Home & Invitation
-          </a>
-          <a href="#coupleSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            👑 The Couple & Lineage
-          </a>
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onNavigateToKalyanam();
-            }}
-            className="mobile-nav-link mobile-nav-btn-link"
-            type="button"
-          >
-            🔥 వివాహ విశిష్టత & సప్తపది (Dedicated Page) →
-          </button>
-          <a href="#wellWishersSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            💐 Family & Near and Dear
-          </a>
-          <a href="#ritualsSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            🪔 Sacred Rituals
-          </a>
-          <a href="#itinerarySection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            📅 Event Schedule
-          </a>
-          <a href="#venueSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            🏛️ Kalyana Vedika (Venue)
-          </a>
-          <a href="#gallerySection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            📸 Photo Gallery
-          </a>
-          <a href="#rsvpSection" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            💌 Send Blessings / RSVP
-          </a>
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onReplayEntry();
-            }}
-            className="mobile-nav-link mobile-nav-btn-link replay-drawer-btn"
-            type="button"
-          >
-            🎬 Replay Cinematic Entry
-          </button>
-        </nav>
-      </aside>
-
       {/* 1. HERO INVITATION SECTION */}
       <section
         id="heroInvitation"
@@ -876,6 +749,15 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
         <p className="footer-copy">
           © 2026 Auspicious Hindu Wedding Celebration • Brundavan Gardens, Parigi, Vikarabad Dist.
         </p>
+        <button
+          onClick={onReplayEntry}
+          className="secondary-btn footer-replay-btn"
+          type="button"
+          style={{ marginTop: '1.2rem', fontSize: '0.8rem', padding: '0.55rem 1.5rem', minHeight: 'auto' }}
+          title="Replay Grand Entrance"
+        >
+          <span>🎬 Replay Grand Entrance</span>
+        </button>
       </footer>
 
       {/* LIGHTBOX MODAL */}

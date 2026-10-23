@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { WeddingData } from '../../data/weddingData';
+import { FloralCornerSVG } from '../ui/FloralCornerSVG';
 
 interface MainInvitationProps {
   data: WeddingData;
@@ -145,13 +146,26 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
         <div className="hero-backdrop-overlay"></div>
 
         <div className="hero-content-card">
-          <div className="ornament-corner top-left"></div>
-          <div className="ornament-corner top-right"></div>
-          <div className="ornament-corner bottom-left"></div>
-          <div className="ornament-corner bottom-right"></div>
+          {/* Delicate Static Floral Corner Ornaments */}
+          <div className="floral-corner top-left" aria-hidden="true">
+            <FloralCornerSVG size={60} />
+          </div>
+          <div className="floral-corner top-right" aria-hidden="true">
+            <FloralCornerSVG size={60} />
+          </div>
+          <div className="floral-corner bottom-left" aria-hidden="true">
+            <FloralCornerSVG size={60} />
+          </div>
+          <div className="floral-corner bottom-right" aria-hidden="true">
+            <FloralCornerSVG size={60} />
+          </div>
 
+          {/* Traditional Telugu & Sanskrit Sacred Invocation */}
           <div className="hero-divine-symbol">శ్రీరస్తు • శుభమస్తు • కళ్యాణమస్తు</div>
           <p className="hero-invocation">॥ వివాహ మహోత్సవ ఆహ్వాన శుభ పత్రిక ॥</p>
+
+          {/* 1. TOGETHER WITH THEIR FAMILIES */}
+          <p className="hero-together-label">TOGETHER WITH THEIR FAMILIES</p>
 
           {guestParam && (
             <div className="guest-greeting-pill">
@@ -159,11 +173,13 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             </div>
           )}
 
-          <h1 className="couple-names-hero">
+          {/* 2. BRIDE NAME & 3. AMPERSAND & 4. GROOM NAME */}
+          <div className="hero-couple-showcase">
             <div className="couple-name-row bride-row">
               <span className="formal-prefix">Chi.La.Sow.</span>
-              <span className="couple-name-title gold-shimmer-text">Lahari</span>
+              <span className="couple-name-script gold-shimmer-text">Lahari</span>
               <span className="couple-alias-badge">(Shireesha)</span>
+              <span className="telugu-single-name">{data.couple.bride.teluguName}</span>
             </div>
 
             <div className="couple-ampersand-wrap">
@@ -174,45 +190,59 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
             <div className="couple-name-row groom-row">
               <span className="formal-prefix">Chi.</span>
-              <span className="couple-name-title gold-shimmer-text">{data.couple.groom.name}</span>
+              <span className="couple-name-script gold-shimmer-text">{data.couple.groom.name}</span>
+              <span className="telugu-single-name">{data.couple.groom.teluguName}</span>
             </div>
-          </h1>
+          </div>
 
           <div className="hero-telugu-pair-badge">
             {data.couple.bride.teluguName} పరిణయం {data.couple.groom.teluguName}
           </div>
 
-          <p className="hero-invitation-intro">
-            We solicit your gracious presence with family and friends on the auspicious occasion of
-            the marriage of our Younger Daughter.
-          </p>
+          {/* Thin Gold Decorative Divider */}
+          <div className="card-thin-divider" aria-hidden="true">
+            <span className="divider-line"></span>
+            <span className="divider-lotus">🪷</span>
+            <span className="divider-line"></span>
+          </div>
 
+          {/* 5. INVITATION MESSAGE */}
+          <div className="hero-invitation-message-block">
+            <p className="hero-invitation-intro">
+              {data.invitationNoteEnglish}
+            </p>
+            <p className="hero-invitation-telugu">
+              {data.invitationNoteTelugu}
+            </p>
+          </div>
+
+          {/* 6. WEDDING DATE & 7. VENUE */}
           <div className="hero-event-highlight">
-            <div className="highlight-item">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
-              </svg>
+            <div className="highlight-item date-highlight">
+              <div className="highlight-icon-box" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
+                </svg>
+              </div>
               <div className="highlight-text-wrap">
+                <span className="highlight-section-tag">Auspicious Wedding Date</span>
                 <span className="highlight-main-title">{data.weddingDateFormatted}</span>
                 <span className="highlight-sub">{data.weddingDateTelugu}</span>
+                <span className="highlight-detail">Sumuhurtham: <strong>{data.muhurthamTime}</strong> ({data.astrology.lagnam})</span>
               </div>
             </div>
-            <div className="highlight-item">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-              </svg>
-              <div className="highlight-text-wrap">
-                <span className="highlight-main-title">Sumuhurtham: {data.muhurthamTime}</span>
-                <span className="highlight-sub">{data.muhurthamTimeTelugu}</span>
+
+            <div className="highlight-item venue-highlight">
+              <div className="highlight-icon-box" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                </svg>
               </div>
-            </div>
-            <div className="highlight-item">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
               <div className="highlight-text-wrap">
+                <span className="highlight-section-tag">Kalyana Vedika</span>
                 <span className="highlight-main-title">{data.venue.name}</span>
-                <span className="highlight-sub">{data.venue.address}</span>
+                <span className="highlight-sub">{data.venue.teluguName}</span>
+                <span className="highlight-detail">{data.venue.address}, {data.venue.city}, {data.venue.district}</span>
               </div>
             </div>
           </div>
@@ -230,6 +260,14 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               </svg>
               <span>Add to Calendar</span>
             </button>
+            <a
+              href={data.venue.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ghost-map-btn"
+            >
+              <span>📍 View Map</span>
+            </a>
           </div>
         </div>
       </section>

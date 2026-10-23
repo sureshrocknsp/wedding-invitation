@@ -1,21 +1,35 @@
 import React, { useEffect, useState } from 'react';
 
+export type CinematicState = 'closed' | 'opening' | 'revealing' | 'settling' | 'invitation';
+
 interface CoupleNamesRevealProps {
   isRevealed: boolean;
-  brideName: string;
-  groomName: string;
-  teluguNames?: string;
+  brideFullName: string;
+  brideTeluguName: string;
+  groomFullName: string;
+  groomTeluguName: string;
+  invitationMessageEnglish: string;
+  invitationMessageTelugu: string;
+  weddingDateFormatted: string;
+  muhurthamTime: string;
+  venueName: string;
   onProceed: () => void;
   autoProceedSeconds?: number;
 }
 
 export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
   isRevealed,
-  brideName,
-  groomName,
-  teluguNames,
+  brideFullName,
+  brideTeluguName,
+  groomFullName,
+  groomTeluguName,
+  invitationMessageEnglish,
+  invitationMessageTelugu,
+  weddingDateFormatted,
+  muhurthamTime,
+  venueName,
   onProceed,
-  autoProceedSeconds = 4
+  autoProceedSeconds = 5
 }) => {
   const [secondsRemaining, setSecondsRemaining] = useState(autoProceedSeconds);
 
@@ -54,45 +68,77 @@ export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
           onProceed();
         }
       }}
-      aria-label="Couple names card - Click or scroll down to enter invitation"
+      aria-label="Wedding Invitation Announcement - Click or scroll down to enter full invitation"
     >
       <div className="card-top-accent" aria-hidden="true"></div>
-      <p className="names-tagline">శ్రీరస్తు • శుభమస్తు • కళ్యాణమస్తు</p>
-      
-      <div className="names-headline-row">
-        <span className="bride-headline gold-shimmer-text">{brideName}</span>
-        <span className="headline-amp">&</span>
-        <span className="groom-headline gold-shimmer-text">{groomName}</span>
+
+      {/* 1. Traditional Invocation & Family Invitation Header */}
+      <div className="reveal-header-block">
+        <p className="names-tagline">శ్రీరస్తు • శుభమస్తు • కళ్యాణమస్తు</p>
+        <p className="together-families-label">Together with their families</p>
       </div>
 
-      {teluguNames && (
-        <div className="telugu-sub-names">
-          {teluguNames}
+      {/* 2. Couple Names: Bride & Groom in exact requested order */}
+      <div className="couple-names-block">
+        <div className="bride-name-unit">
+          <h2 className="bride-headline gold-shimmer-text">{brideFullName}</h2>
+          {brideTeluguName && <span className="telugu-sub-title">{brideTeluguName}</span>}
         </div>
-      )}
 
-      <p className="names-invitation-request">
-        We solicit your gracious presence with family & friends<br />
-        at our auspicious wedding celebration.
-      </p>
+        <div className="names-ampersand-divider" aria-hidden="true">
+          <span className="headline-amp">&</span>
+        </div>
 
-      {/* Primary Action Button */}
-      <button
-        className="enter-invitation-btn"
-        onClick={(e) => {
-          e.stopPropagation();
-          onProceed();
-        }}
-        type="button"
-        aria-label="Enter Full Wedding Invitation"
-      >
-        <span>Enter Wedding Invitation</span>
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-          <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
-        </svg>
-      </button>
+        <div className="groom-name-unit">
+          <h2 className="groom-headline gold-shimmer-text">{groomFullName}</h2>
+          {groomTeluguName && <span className="telugu-sub-title">{groomTeluguName}</span>}
+        </div>
+      </div>
 
-      {/* Auto-proceed Indicator & Swipe Hint */}
+      {/* 3. Existing Invitation Message */}
+      <div className="invitation-message-unit">
+        <p className="names-invitation-request">
+          {invitationMessageEnglish}
+        </p>
+        {invitationMessageTelugu && (
+          <p className="names-invitation-telugu">
+            {invitationMessageTelugu}
+          </p>
+        )}
+      </div>
+
+      {/* 4. Event & Venue pill */}
+      <div className="reveal-event-summary-pill" aria-label={`Date: ${weddingDateFormatted}, Venue: ${venueName}`}>
+        <span className="summary-pill-item">
+          <span className="pill-icon" aria-hidden="true">🗓️</span>
+          <span>{weddingDateFormatted} ({muhurthamTime})</span>
+        </span>
+        <span className="pill-dot" aria-hidden="true">•</span>
+        <span className="summary-pill-item">
+          <span className="pill-icon" aria-hidden="true">📍</span>
+          <span>{venueName}</span>
+        </span>
+      </div>
+
+      {/* 5. Primary Action Button */}
+      <div className="card-action-row">
+        <button
+          className="enter-invitation-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onProceed();
+          }}
+          type="button"
+          aria-label="Enter Wedding Invitation"
+        >
+          <span>Enter Wedding Invitation</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+          </svg>
+        </button>
+      </div>
+
+      {/* 6. Auto-proceed Indicator & Scroll Hint */}
       <div className="auto-proceed-container" aria-hidden="true">
         <div className="auto-proceed-progress-bar">
           <div
@@ -111,4 +157,3 @@ export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
     </div>
   );
 };
-

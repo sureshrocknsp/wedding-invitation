@@ -1,23 +1,41 @@
 import React from 'react';
+import { CinematicState } from './WeddingEntrance';
 
 interface WeddingDoorsProps {
-  isOpening: boolean;
-  isGoldenLightActive: boolean;
-  isDoorOpen: boolean;
+  state: CinematicState;
   onTapToEnter: () => void;
 }
 
-export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
-  isOpening,
-  isGoldenLightActive,
-  isDoorOpen,
-  onTapToEnter
-}) => {
+export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter }) => {
+  const isClosed = state === 'closed';
+  const isOpening = state === 'opening';
+  const isRevealing = state === 'revealing';
+  const isSettling = state === 'settling';
+  const isInvitation = state === 'invitation';
+
+  const isDoorOpen = isOpening || isRevealing || isSettling || isInvitation;
+  const isGoldenLightActive = isOpening || isRevealing;
+  const isPortalDissolved = isSettling || isInvitation;
+
   return (
     <div
-      className={`grand-venue-entrance-portal ${isOpening ? 'animating' : ''} ${
+      className={`grand-venue-entrance-portal ${isDoorOpen ? 'animating' : ''} ${
         isGoldenLightActive ? 'golden-light-active' : ''
-      } ${isDoorOpen ? 'doors-opened' : ''}`}
+      } ${isDoorOpen ? 'doors-opened' : ''} ${isPortalDissolved ? 'portal-dissolved' : ''}`}
+      onClick={isClosed ? onTapToEnter : undefined}
+      role={isClosed ? 'button' : undefined}
+      tabIndex={isClosed ? 0 : -1}
+      onKeyDown={
+        isClosed
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onTapToEnter();
+              }
+            }
+          : undefined
+      }
+      aria-label={isClosed ? 'Grand Entrance Doors - Tap to enter wedding celebration' : undefined}
     >
       <div className="grand-portal-stage">
         {/* Ambient atmospheric backdrop extension for ultra-wide and mobile screens */}
@@ -32,7 +50,7 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
               <div className="portal-door-panel door-leaf-left" id="doorLeafLeft">
                 <img
                   src="/assets/images/door_leaf_left.jpg"
-                  alt="Left Door"
+                  alt="Left Carved Wooden Door"
                   className="door-leaf-img"
                   draggable={false}
                 />
@@ -44,7 +62,7 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
               <div className="portal-door-panel door-leaf-right" id="doorLeafRight">
                 <img
                   src="/assets/images/door_leaf_right.jpg"
-                  alt="Right Door"
+                  alt="Right Carved Wooden Door"
                   className="door-leaf-img"
                   draggable={false}
                 />
@@ -65,7 +83,7 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
           {/* 2. In front of the doors: The Grand Portal Frame with transparent doorway */}
           <img
             src="/assets/images/grand_doors_portal_frame.png"
-            alt="Grand Entrance Portal"
+            alt="Grand Entrance Stone Pillars, Garlands and Arch"
             className="portal-proscenium-frame-img"
             draggable={false}
           />
@@ -81,11 +99,14 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
           </div>
         </div>
 
-        {/* 4. Elegant, Royal "TAP TO ENTER" Indicator */}
-        {!isOpening && (
+        {/* 4. Subtle, Royal "TAP TO ENTER" Indicator (Visible only in 'closed' state) */}
+        {isClosed && (
           <div
             className="tap-to-enter-pill"
-            onClick={onTapToEnter}
+            onClick={(e) => {
+              e.stopPropagation();
+              onTapToEnter();
+            }}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
@@ -97,9 +118,9 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
             aria-label="Tap to enter wedding venue"
           >
             <div className="tap-badge-content">
-              <span className="tap-diya-icon">🪔</span>
+              <span className="tap-diya-icon" aria-hidden="true">🪔</span>
               <span className="tap-badge-text">TAP TO ENTER</span>
-              <span className="tap-diya-icon">🪔</span>
+              <span className="tap-diya-icon" aria-hidden="true">🪔</span>
             </div>
             <p className="tap-badge-sub">Click anywhere or press Enter to step into the celebration</p>
           </div>
@@ -108,7 +129,3 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({
     </div>
   );
 };
-
-
-
-

@@ -1,8 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { WeddingInterior } from './WeddingInterior';
 import { WeddingDoors } from './WeddingDoors';
 import { CoupleNamesReveal } from './CoupleNamesReveal';
 import { WeddingData } from '../../data/weddingData';
+
+export type CinematicState = 'closed' | 'opening' | 'revealing' | 'settling' | 'invitation';
 
 interface WeddingEntranceProps {
   data: WeddingData;
@@ -15,17 +17,21 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
   onAudioStart,
   onComplete
 }) => {
-  const [isOpening, setIsOpening] = useState(false);
-  const [isGoldenLightActive, setIsGoldenLightActive] = useState(false);
-  const [isDoorOpen, setIsDoorOpen] = useState(false);
-  const [isCameraWalkIn, setIsCameraWalkIn] = useState(false);
-  const [isVinayakaRevealed, setIsVinayakaRevealed] = useState(false);
-  const [isMandapamRevealed, setIsMandapamRevealed] = useState(false);
-  const [isSettled, setIsSettled] = useState(false);
-  const [isCoupleNamesRevealed, setIsCoupleNamesRevealed] = useState(false);
+  const [cinematicState, setCinematicState] = useState<CinematicState>('closed');
   const [isDismissed, setIsDismissed] = useState(false);
+  const timersRef = useRef<number[]>([]);
+
+  const clearAllTimers = useCallback(() => {
+    timersRef.current.forEach((id) => clearTimeout(id));
+    timersRef.current = [];
+  }, []);
+
+  useEffect(() => {
+    return () => clearAllTimers();
+  }, [clearAllTimers]);
 
   const handleProceedToInvitation = useCallback(() => {
+    clearAllTimers();
     setIsDismissed(true);
     onComplete();
     setTimeout(() => {
@@ -33,59 +39,80 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
       if (inviteSection) {
         inviteSection.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 150);
-  }, [onComplete]);
+    }, 120);
+  }, [clearAllTimers, onComplete]);
 
   const handleOpenDoors = useCallback(() => {
-    if (isOpening) return;
+    // Prevent repeated triggers while animation is in flight
+    if (cinematicState !== 'closed') return;
 
-    // 1. Start audio & celebratory temple bells (t = 0s)
+    // 1. Start audio and celebratory temple bells
     onAudioStart();
 
-    // 2. Doors begin physical 3D rotation outward (t = 0s)
-    setIsOpening(true);
+    // Check for user reduced-motion preference
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // 3. Golden light appears through opening seam (t = 0.3s)
-    setTimeout(() => {
-      setIsGoldenLightActive(true);
-    }, 300);
+    if (prefersReducedMotion) {
+      setCinematicState('invitation');
+      return;
+    }
 
-    // 4. Doors swing open wide & camera walks forward into mandapam (t = 0.9s)
-    setTimeout(() => {
-      setIsDoorOpen(true);
-      setIsCameraWalkIn(true);
-      setIsMandapamRevealed(true);
-    }, 900);
+    // 2. Closed -> Opening (t = 0s)
+    // Doors start 3D rotation outward, golden light starts bursting
+    setCinematicState('opening');
 
-    // 5. Lord Vinayaka is illuminated at the center of the floral mandapam (t = 1.3s)
-    setTimeout(() => {
-      setIsVinayakaRevealed(true);
-      setIsSettled(true);
-    }, 1300);
+    // 3. Opening -> Revealing (t = 1.8s)
+    // Doors sufficiently open; reveal the realistic Vinayaka mandapam image
+    const tReveal = window.setTimeout(() => {
+      setCinematicState('revealing');
+    }, 1800);
 
-    // 6. Couple names appear after the reveal (t = 2.4s)
-    setTimeout(() => {
-      setIsCoupleNamesRevealed(true);
-    }, 2400);
-  }, [isOpening, onAudioStart]);
+    // 4. Revealing -> Settling (t = 2.8s)
+    // Camera moves gently forward toward mandapam; Vinayaka remains centered in crisp visual focus
+    const tSettle = window.setTimeout(() => {
+      setCinematicState('settling');
+    }, 2800);
 
-  // Keyboard trigger (Enter, Space, ArrowDown)
+    // 5. Settling -> Invitation (t = 4.4s)
+    // Camera settles; fade in the couple names and invitation message
+    const tInvite = window.setTimeout(() => {
+      setCinematicState('invitation');
+    }, 4400);
+
+    timersRef.current = [tReveal, tSettle, tInvite];
+  }, [cinematicState, onAudioStart]);
+
+  // Keyboard navigation & accessibility (Enter, Space, Escape, ArrowDown, PageDown)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpening && (e.key === 'Enter' || e.key === ' ')) {
+      if (e.key === 'Escape') {
         e.preventDefault();
-        handleOpenDoors();
-      } else if (isOpening && (e.key === 'ArrowDown' || e.key === 'PageDown')) {
         handleProceedToInvitation();
+        return;
+      }
+
+      if (cinematicState === 'closed') {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleOpenDoors();
+        }
+      } else if (cinematicState === 'invitation') {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          handleProceedToInvitation();
+        }
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpening, handleOpenDoors, handleProceedToInvitation]);
+  }, [cinematicState, handleOpenDoors, handleProceedToInvitation]);
 
-  // Mouse wheel scroll to enter invitation directly once doors are open
+  // Mouse wheel scroll to enter invitation directly once in 'invitation' state
   useEffect(() => {
-    if (!isCoupleNamesRevealed) return;
+    if (cinematicState !== 'invitation') return;
 
     let wheelAccumulator = 0;
     const handleWheel = (e: WheelEvent) => {
@@ -99,11 +126,11 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
 
     window.addEventListener('wheel', handleWheel, { passive: true });
     return () => window.removeEventListener('wheel', handleWheel);
-  }, [isCoupleNamesRevealed, handleProceedToInvitation]);
+  }, [cinematicState, handleProceedToInvitation]);
 
   // Touch swipe-up to enter invitation on mobile
   useEffect(() => {
-    if (!isCoupleNamesRevealed) return;
+    if (cinematicState !== 'invitation') return;
 
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
@@ -127,7 +154,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [isCoupleNamesRevealed, handleProceedToInvitation]);
+  }, [cinematicState, handleProceedToInvitation]);
 
   if (isDismissed) {
     return null;
@@ -136,40 +163,38 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
   return (
     <section
       id="cinematicStage"
-      className={`cinematic-entrance-viewport ${isOpening ? 'opening-started' : ''} ${
-        isCameraWalkIn ? 'walk-in-active' : ''
-      } ${isDismissed ? 'dismissed' : ''}`}
-      aria-label="Cinematic Hindu Wedding Entrance and Reveal"
+      className={`cinematic-entrance-viewport state-${cinematicState} ${
+        isDismissed ? 'dismissed' : ''
+      }`}
+      aria-label="Cinematic Hindu Wedding Entrance and Vinayaka Reveal"
     >
-      {/* Layer 1 (BACKGROUND): Photorealistic Vinayaka Kalyana Mandapam Interior Scene */}
-      <WeddingInterior
-        isOpening={isOpening}
-        isGoldenLightActive={isGoldenLightActive}
-        isVinayakaRevealed={isVinayakaRevealed}
-        isMandapamRevealed={isMandapamRevealed}
-        isSettled={isSettled}
-      />
+      {/* Layer 1 (BACKGROUND): Realistic Vinayaka Kalyana Mandapam Interior Scene */}
+      <WeddingInterior state={cinematicState} />
 
       {/* Layer 2 (MIDDLE): Realistic 3D Hinged Double Doors & Foreground Architectural Arch */}
       <WeddingDoors
-        isOpening={isOpening}
-        isGoldenLightActive={isGoldenLightActive}
-        isDoorOpen={isDoorOpen}
+        state={cinematicState}
         onTapToEnter={handleOpenDoors}
       />
 
-      {/* Layer 3 (FOREGROUND): Couple Names Reveal Card - Appears after Vinayaka Mandapam is revealed */}
+      {/* Layer 3 (FOREGROUND): Couple Names Reveal Card (Shown after camera settles) */}
       <CoupleNamesReveal
-        isRevealed={isCoupleNamesRevealed}
-        brideName={data.couple.bride.name}
-        groomName={data.couple.groom.name}
-        teluguNames={`${data.couple.bride.teluguName} పరిణయం ${data.couple.groom.teluguName}`}
+        isRevealed={cinematicState === 'invitation'}
+        brideFullName={data.couple.bride.fullName}
+        brideTeluguName={data.couple.bride.teluguName}
+        groomFullName={data.couple.groom.fullName}
+        groomTeluguName={data.couple.groom.teluguName}
+        invitationMessageEnglish={data.invitationNoteEnglish}
+        invitationMessageTelugu={data.invitationNoteTelugu}
+        weddingDateFormatted={data.weddingDateFormatted}
+        muhurthamTime={data.muhurthamTime}
+        venueName={data.venue.name}
         onProceed={handleProceedToInvitation}
         autoProceedSeconds={5}
       />
 
-      {/* Prominent, accessible Skip button whenever doors are opening */}
-      {isOpening && (
+      {/* Accessible Skip Button — Available whenever opening sequence starts */}
+      {cinematicState !== 'closed' && (
         <button
           className="cinematic-skip-btn"
           onClick={(e) => {
@@ -177,7 +202,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
             handleProceedToInvitation();
           }}
           type="button"
-          aria-label="Skip entrance and go directly to Wedding Invitation"
+          aria-label="Skip cinematic sequence and go directly to Wedding Invitation"
         >
           <span>Skip to Invitation →</span>
         </button>
@@ -185,4 +210,3 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
     </section>
   );
 };
-

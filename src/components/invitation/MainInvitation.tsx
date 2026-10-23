@@ -23,9 +23,15 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
   // RSVP state
   const [rsvpName, setRsvpName] = useState('');
+  const [rsvpAttendance, setRsvpAttendance] = useState<'attending' | 'declined'>('attending');
+  const [rsvpCount, setRsvpCount] = useState<string>('2');
   const [rsvpMessage, setRsvpMessage] = useState('');
   const [rsvpNameError, setRsvpNameError] = useState(false);
+  const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
   const [blessings, setBlessings] = useState(data.rsvp.initialBlessings);
+
+  // Off-canvas quick navigation drawer state
+  const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
 
   // Personalized guest greeting from URL (?guest= or ?to=)
   const [guestParam, setGuestParam] = useState<string | null>(null);
@@ -38,7 +44,10 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
   // Countdown logic
   useEffect(() => {
+    if (!data.weddingDate) return;
     const target = new Date(data.weddingDate).getTime();
+    if (isNaN(target)) return;
+
     const updateCountdown = () => {
       const now = new Date().getTime();
       const diff = target - now;
@@ -81,12 +90,15 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     }
     setRsvpNameError(false);
 
+    const isAttending = rsvpAttendance === 'attending';
+    const noteText = rsvpMessage.trim() || (isAttending 
+      ? `Joyfully celebrating with Shiva Kumar & Lahari! (${rsvpCount} ${rsvpCount === '1' ? 'person' : 'persons'} attending)` 
+      : 'Sending our heartfelt blessings & warmest wishes to the couple!');
+
     const newBlessing = {
       name: rsvpName.trim(),
       time: 'Just now',
-      text:
-        rsvpMessage.trim() ||
-        'Heartfelt congratulations & best wishes to Shiva Kumar & Lahari!'
+      text: noteText
     };
 
     const updated = [newBlessing, ...blessings];
@@ -95,12 +107,15 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       localStorage.setItem('wedding_blessings_react_v1', JSON.stringify(updated));
     } catch {}
 
-    alert(
-      `✨ ధన్యవాదాలు (Thank you), ${rsvpName}! ✨\n\nYour warm blessings for Lahari & Shiva Kumar have been received with joyful gratitude!`
-    );
+    setRsvpSubmitted(true);
+  };
 
+  const handleResetRsvp = () => {
     setRsvpName('');
     setRsvpMessage('');
+    setRsvpAttendance('attending');
+    setRsvpCount('2');
+    setRsvpSubmitted(false);
   };
 
   // Lightbox navigation
@@ -118,6 +133,28 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       );
     }
   };
+
+  // Lightbox keyboard controls (Escape, ArrowLeft, ArrowRight)
+  useEffect(() => {
+    if (activeLightboxIndex === null) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextLightbox();
+      if (e.key === 'ArrowLeft') prevLightbox();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [activeLightboxIndex, data.gallery.length]);
+
+  // Drawer keyboard controls (Escape closes drawer)
+  useEffect(() => {
+    if (!isNavDrawerOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsNavDrawerOpen(false);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [isNavDrawerOpen]);
 
   // Add to Calendar
   const handleAddToCalendar = () => {
@@ -289,7 +326,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       </section>
 
       {/* 2. LIVE COUNTDOWN & ASTROLOGY SECTION */}
-      <section className="countdown-section">
+      <section className="countdown-section" id="countdownSection">
         <div className="section-container">
           <div className="countdown-wrapper">
             <span className="muhurtham-badge">🪔 Auspicious Muhurtham Countdown • సుముహూర్తం 🪔</span>
@@ -298,19 +335,26 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               <div className="timer-grid">
                 <div className="timer-unit">
                   <div className="timer-digit">{String(timeLeft.days).padStart(2, '0')}</div>
-                  <div className="timer-label">Days / రోజులు</div>
+                  <div className="timer-label">DAYS</div>
+                  <div className="timer-sublabel">రోజులు</div>
                 </div>
+                <div className="timer-sep" aria-hidden="true">|</div>
                 <div className="timer-unit">
                   <div className="timer-digit">{String(timeLeft.hours).padStart(2, '0')}</div>
-                  <div className="timer-label">Hours / గంటలు</div>
+                  <div className="timer-label">HOURS</div>
+                  <div className="timer-sublabel">గంటలు</div>
                 </div>
+                <div className="timer-sep" aria-hidden="true">|</div>
                 <div className="timer-unit">
                   <div className="timer-digit">{String(timeLeft.minutes).padStart(2, '0')}</div>
-                  <div className="timer-label">Minutes / నిమిషాలు</div>
+                  <div className="timer-label">MINUTES</div>
+                  <div className="timer-sublabel">నిమిషాలు</div>
                 </div>
+                <div className="timer-sep" aria-hidden="true">|</div>
                 <div className="timer-unit">
                   <div className="timer-digit">{String(timeLeft.seconds).padStart(2, '0')}</div>
-                  <div className="timer-label">Seconds / సెకన్లు</div>
+                  <div className="timer-label">SECONDS</div>
+                  <div className="timer-sublabel">సెకన్లు</div>
                 </div>
               </div>
             ) : (
@@ -562,6 +606,20 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                     ⏰ {e.time} | {e.venue}
                   </div>
                   <p className="timeline-desc">{e.description}</p>
+                  <div className="timeline-directions-row">
+                    <a
+                      href={data.venue.googleMapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="event-directions-link"
+                      title={`View directions to ${e.venue}`}
+                    >
+                      <span>📍 View Directions</span>
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                      </svg>
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}
@@ -681,47 +739,110 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
           <div className="rsvp-layout-grid">
             <div className="rsvp-form-box">
-              <form onSubmit={handleRsvpSubmit} noValidate>
-                <div className="form-group">
-                  <label htmlFor="rsvpGuestName" className="form-label">
-                    Full Name / Family Name <span className="req-star">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="rsvpGuestName"
-                    className="form-input"
-                    placeholder="e.g. S. Ramulu Yadav & Family"
-                    value={rsvpName}
-                    onChange={(e) => setRsvpName(e.target.value)}
-                    required
-                  />
-                  {rsvpNameError && (
-                    <span className="form-error-msg" style={{ display: 'block' }}>
-                      Please enter your name.
-                    </span>
+              {rsvpSubmitted ? (
+                <div className="rsvp-success-banner" role="status" aria-live="polite">
+                  <div className="success-icon">✨ 💌 🪔</div>
+                  <h4 className="success-title gold-text">RSVP Received with Joy!</h4>
+                  <p className="success-msg">
+                    Thank you, <strong>{rsvpName}</strong>. Your response ({rsvpAttendance === 'attending' ? `Attending with ${rsvpCount} ${rsvpCount === '1' ? 'person' : 'persons'}` : 'Warmly wishing from afar'}) and heartfelt blessings have been added to our celebration wall.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleResetRsvp}
+                    className="secondary-btn rsvp-reset-btn"
+                  >
+                    <span>Submit Another Response</span>
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleRsvpSubmit} noValidate>
+                  <div className="form-group">
+                    <label htmlFor="rsvpGuestName" className="form-label">
+                      Full Name / Family Name <span className="req-star">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="rsvpGuestName"
+                      className="form-input"
+                      placeholder="e.g. S. Ramulu Yadav & Family"
+                      value={rsvpName}
+                      onChange={(e) => {
+                        setRsvpName(e.target.value);
+                        if (rsvpNameError) setRsvpNameError(false);
+                      }}
+                      required
+                      aria-invalid={rsvpNameError}
+                    />
+                    {rsvpNameError && (
+                      <span className="form-error-msg" style={{ display: 'block' }}>
+                        Please enter your name.
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Will you be attending? <span className="req-star">*</span></label>
+                    <div className="attendance-choice-group" role="radiogroup" aria-label="Attendance choices">
+                      <button
+                        type="button"
+                        role="radio"
+                        aria-checked={rsvpAttendance === 'attending'}
+                        className={`attendance-pill-btn ${rsvpAttendance === 'attending' ? 'active' : ''}`}
+                        onClick={() => setRsvpAttendance('attending')}
+                      >
+                        <span>🌸 Joyfully Accept</span>
+                      </button>
+                      <button
+                        type="button"
+                        role="radio"
+                        aria-checked={rsvpAttendance === 'declined'}
+                        className={`attendance-pill-btn ${rsvpAttendance === 'declined' ? 'active' : ''}`}
+                        onClick={() => setRsvpAttendance('declined')}
+                      >
+                        <span>🕊️ Regretfully Decline</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {rsvpAttendance === 'attending' && (
+                    <div className="form-group">
+                      <label htmlFor="rsvpGuestsCount" className="form-label">
+                        Number of Guests Attending
+                      </label>
+                      <select
+                        id="rsvpGuestsCount"
+                        className="form-select"
+                        value={rsvpCount}
+                        onChange={(e) => setRsvpCount(e.target.value)}
+                      >
+                        <option value="1">1 Person</option>
+                        <option value="2">2 Persons</option>
+                        <option value="3">3 Persons</option>
+                        <option value="4">4 Persons</option>
+                        <option value="5+">5+ Persons (Family)</option>
+                      </select>
+                    </div>
                   )}
-                </div>
 
+                  <div className="form-group">
+                    <label htmlFor="rsvpMessage" className="form-label">
+                      Blessings & Wishes for the Couple
+                    </label>
+                    <textarea
+                      id="rsvpMessage"
+                      className="form-textarea"
+                      rows={3}
+                      placeholder="Write your heartfelt blessings for Shiva Kumar & Lahari..."
+                      value={rsvpMessage}
+                      onChange={(e) => setRsvpMessage(e.target.value)}
+                    ></textarea>
+                  </div>
 
-
-                <div className="form-group">
-                  <label htmlFor="rsvpMessage" className="form-label">
-                    Blessings & Wishes for the Couple
-                  </label>
-                  <textarea
-                    id="rsvpMessage"
-                    className="form-textarea"
-                    rows={3}
-                    placeholder="Write your heartfelt blessings for Shiva Kumar & Lahari..."
-                    value={rsvpMessage}
-                    onChange={(e) => setRsvpMessage(e.target.value)}
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="submit-rsvp-btn">
-                  <span>Submit RSVP & Post Blessing</span>
-                </button>
-              </form>
+                  <button type="submit" className="submit-rsvp-btn">
+                    <span>Submit RSVP & Post Blessing</span>
+                  </button>
+                </form>
+              )}
             </div>
 
             <div className="blessings-wall-box">
@@ -842,6 +963,83 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               </svg>
             </button>
           </div>
+        </div>
+      )}
+      {/* QUICK NAVIGATION FLOATING TRIGGER */}
+      <button
+        type="button"
+        className="quick-nav-drawer-trigger"
+        onClick={() => setIsNavDrawerOpen(true)}
+        aria-label="Open Navigation Menu"
+        title="Quick Navigation"
+      >
+        <span className="nav-trigger-icon">📜</span>
+        <span className="nav-trigger-text">Menu</span>
+      </button>
+
+      {/* QUICK NAVIGATION OFF-CANVAS DRAWER */}
+      {isNavDrawerOpen && (
+        <div className="nav-drawer-overlay" onClick={() => setIsNavDrawerOpen(false)}>
+          <aside
+            className="nav-drawer-panel"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-label="Wedding Site Navigation"
+          >
+            <div className="nav-drawer-header">
+              <div>
+                <span className="nav-drawer-badge">Auspicious Wedding</span>
+                <h3 className="nav-drawer-title gold-text">Lahari & Shiva Kumar</h3>
+              </div>
+              <button
+                type="button"
+                className="nav-drawer-close"
+                onClick={() => setIsNavDrawerOpen(false)}
+                aria-label="Close menu"
+              >
+                &times;
+              </button>
+            </div>
+
+            <nav className="nav-drawer-links">
+              {[
+                { href: '#heroInvitation', label: 'Wedding Invitation', icon: '🌸' },
+                { href: '#divineBlessingSection', label: 'Divine Shloka', icon: '🕉️' },
+                { href: '#countdownSection', label: 'Sumuhurtham & Countdown', icon: '🪔' },
+                { href: '#coupleSection', label: 'The Bride & Groom', icon: '👫' },
+                { href: '#invitesBySection', label: 'Family & Well Wishers', icon: '🌺' },
+                { href: '#ritualsSection', label: 'Sacred Ceremonies', icon: '🌿' },
+                { href: '#itinerarySection', label: 'Schedule of Events', icon: '📅' },
+                { href: '#venueSection', label: 'Wedding Venue', icon: '🏛️' },
+                { href: '#gallerySection', label: 'Memories & Moments', icon: '📸' },
+                { href: '#rsvpSection', label: 'RSVP & Blessings', icon: '💌' },
+                { href: '#closingSection', label: 'Mangalam & Gratitude', icon: '🙏' },
+              ].map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="nav-drawer-item"
+                  onClick={() => setIsNavDrawerOpen(false)}
+                >
+                  <span className="nav-item-icon">{item.icon}</span>
+                  <span className="nav-item-label">{item.label}</span>
+                </a>
+              ))}
+            </nav>
+
+            <div className="nav-drawer-footer">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsNavDrawerOpen(false);
+                  onReplayEntry();
+                }}
+                className="secondary-btn nav-drawer-replay"
+              >
+                <span>🎬 Replay Grand Entrance</span>
+              </button>
+            </div>
+          </aside>
         </div>
       )}
     </div>

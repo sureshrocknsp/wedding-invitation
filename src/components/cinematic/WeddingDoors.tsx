@@ -53,6 +53,9 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter 
                   alt="Left Carved Wooden Door"
                   className="door-leaf-img"
                   draggable={false}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
                 <div className="door-panel-shade shade-left"></div>
                 <div className="door-edge-brass trim-right"></div>
@@ -65,6 +68,9 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter 
                   alt="Right Carved Wooden Door"
                   className="door-leaf-img"
                   draggable={false}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
                 />
                 <div className="door-panel-shade shade-right"></div>
                 <div className="door-edge-brass trim-left"></div>
@@ -86,6 +92,13 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter 
             alt="Grand Entrance Stone Pillars, Garlands and Arch"
             className="portal-proscenium-frame-img"
             draggable={false}
+            onError={(e) => {
+              const current = e.currentTarget;
+              if (!current.dataset.fallbackTried) {
+                current.dataset.fallbackTried = 'true';
+                current.src = '/images/wedding/grand-entrance.webp';
+              }
+            }}
           />
 
           {/* 3. Living temple effects: Flickering flames on the left & right brass oil lamps */}

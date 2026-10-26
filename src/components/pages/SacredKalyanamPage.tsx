@@ -83,6 +83,13 @@ export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
                   src="/assets/images/divine_blessings.jpg"
                   alt="Supreme Deities Showering Divine Blessings upon Lahari and Shiva Kumar"
                   className="divine-blessings-img"
+                  onError={(e) => {
+                    const current = e.currentTarget;
+                    if (!current.dataset.fallbackTried) {
+                      current.dataset.fallbackTried = 'true';
+                      current.src = '/assets/images/mandapam_stage.jpg';
+                    }
+                  }}
                 />
                 <div className="divine-image-overlay">
                   <span className="divine-shimmer-tag">
@@ -298,6 +305,13 @@ export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
               <img
                 src="/assets/images/divine_blessings.jpg"
                 alt="Divine Celestial Blessings"
+                onError={(e) => {
+                  const current = e.currentTarget;
+                  if (!current.dataset.fallbackTried) {
+                    current.dataset.fallbackTried = 'true';
+                    current.src = '/assets/images/mandapam_stage.jpg';
+                  }
+                }}
               />
               <div className="lightbox-caption-bar">
                 <div className="lightbox-caption-title">

@@ -32,6 +32,13 @@ export const WeddingInterior: React.FC<WeddingInteriorProps> = ({ state }) => {
             className="mandapam-photo-img"
             loading="eager"
             decoding="sync"
+            onError={(e) => {
+              const current = e.currentTarget;
+              if (!current.dataset.fallbackTried) {
+                current.dataset.fallbackTried = 'true';
+                current.src = '/images/wedding/vinayaka-mandapam.webp';
+              }
+            }}
           />
         </picture>
         <div className="mandapam-cinematic-vignette" aria-hidden="true"></div>

@@ -400,6 +400,13 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                   src={data.couple.bride.photo}
                   alt={`${data.couple.bride.name} - Bride`}
                   className="couple-avatar-img bride-avatar-img"
+                  onError={(e) => {
+                    const current = e.currentTarget;
+                    if (!current.dataset.fallbackTried) {
+                      current.dataset.fallbackTried = 'true';
+                      current.src = '/assets/images/couple_portrait.jpg';
+                    }
+                  }}
                 />
               </div>
               <div className="couple-role-badge">{data.couple.bride.role}</div>
@@ -423,6 +430,13 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                   src={data.couple.groom.photo}
                   alt={`${data.couple.groom.name} - Groom`}
                   className="couple-avatar-img groom-avatar-img"
+                  onError={(e) => {
+                    const current = e.currentTarget;
+                    if (!current.dataset.fallbackTried) {
+                      current.dataset.fallbackTried = 'true';
+                      current.src = '/assets/images/couple_portrait.jpg';
+                    }
+                  }}
                 />
               </div>
               <div className="couple-role-badge">{data.couple.groom.role}</div>
@@ -558,7 +572,17 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             {data.rituals.map((r) => (
               <div key={r.id} className="ritual-card">
                 <div className="ritual-image-box">
-                  <img src={r.image} alt={r.name} />
+                  <img
+                    src={r.image}
+                    alt={r.name}
+                    onError={(e) => {
+                      const current = e.currentTarget;
+                      if (!current.dataset.fallbackTried) {
+                        current.dataset.fallbackTried = 'true';
+                        current.src = '/assets/images/mandapam_stage.jpg';
+                      }
+                    }}
+                  />
                   <span className="ritual-badge-time">{r.time}</span>
                 </div>
                 <div className="ritual-info">
@@ -713,7 +737,18 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                 role="button"
                 tabIndex={0}
               >
-                <img src={g.src} alt={g.title} loading="lazy" />
+                <img
+                  src={g.src}
+                  alt={g.title}
+                  loading="lazy"
+                  onError={(e) => {
+                    const current = e.currentTarget;
+                    if (!current.dataset.fallbackTried) {
+                      current.dataset.fallbackTried = 'true';
+                      current.src = '/assets/images/mandapam_stage.jpg';
+                    }
+                  }}
+                />
                 <div className="gallery-overlay-hover">
                   <span className="gallery-icon-zoom">🔍</span>
                   <span className="gallery-title-text">{g.title}</span>
@@ -943,6 +978,13 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               <img
                 src={data.gallery[activeLightboxIndex].src}
                 alt={data.gallery[activeLightboxIndex].title}
+                onError={(e) => {
+                  const current = e.currentTarget;
+                  if (!current.dataset.fallbackTried) {
+                    current.dataset.fallbackTried = 'true';
+                    current.src = '/assets/images/mandapam_stage.jpg';
+                  }
+                }}
               />
               <div className="lightbox-caption-bar">
                 <div className="lightbox-caption-title">

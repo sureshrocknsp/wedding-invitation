@@ -137,6 +137,26 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       text: noteText
     };
 
+    // Optional remote API/webhook dispatch (e.g. Google Sheets, Formspree, or custom webhook)
+    const remoteEndpoint = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_RSVP_ENDPOINT) || data.rsvp.submissionEndpoint;
+    if (remoteEndpoint) {
+      try {
+        fetch(remoteEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: rsvpName.trim(),
+            attendance: rsvpAttendance,
+            guestCount: rsvpAttendance === 'attending' ? rsvpCount : '0',
+            message: rsvpMessage.trim(),
+            submittedAt: new Date().toISOString()
+          })
+        }).catch((err) => {
+          console.warn('Optional remote RSVP webhook skipped:', err);
+        });
+      } catch {}
+    }
+
     setTimeout(() => {
       try {
         const updated = [newBlessing, ...blessings];
@@ -166,7 +186,8 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   const handleShareInvitation = async () => {
     const title = data.socialSharing?.ogTitle || `${data.couple.bride.name} & ${data.couple.groom.name} — Wedding Invitation`;
     const text = data.socialSharing?.shareTextEnglish || `You are cordially invited to celebrate the auspicious marriage ceremony of ${data.couple.bride.fullName} and ${data.couple.groom.fullName} on ${data.weddingDateFormatted} at ${data.venue.name}, ${data.venue.city}.`;
-    const shareUrl = window.location.href.split('#')[0];
+    const configuredPublicUrl = typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_PUBLIC_URL;
+    const shareUrl = configuredPublicUrl ? configuredPublicUrl.replace(/\/+$/, '') : window.location.href.split('#')[0];
 
     if (navigator.share && navigator.canShare && navigator.canShare({ title, text, url: shareUrl })) {
       try {

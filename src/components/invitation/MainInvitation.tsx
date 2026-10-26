@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { WeddingData } from '../../data/weddingData';
 import { FloralCornerSVG } from '../ui/FloralCornerSVG';
+import { ShareModal } from '../ui/ShareModal';
 
 interface MainInvitationProps {
   data: WeddingData;
@@ -20,6 +21,9 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
   // Lightbox state
   const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
+
+  // Share & QR Modal state
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   // RSVP state
   const [rsvpName, setRsvpName] = useState('');
@@ -182,41 +186,9 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     setRsvpSubmitted(false);
   };
 
-  // Tasteful Share Functionality (Web Share API with Clipboard Fallback)
-  const handleShareInvitation = async () => {
-    const title = data.socialSharing?.ogTitle || `${data.couple.bride.name} & ${data.couple.groom.name} — Wedding Invitation`;
-    const text = data.socialSharing?.shareTextEnglish || `You are cordially invited to celebrate the auspicious marriage ceremony of ${data.couple.bride.fullName} and ${data.couple.groom.fullName} on ${data.weddingDateFormatted} at ${data.venue.name}, ${data.venue.city}.`;
-    const configuredPublicUrl = typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_PUBLIC_URL;
-    const shareUrl = configuredPublicUrl ? configuredPublicUrl.replace(/\/+$/, '') : window.location.href.split('#')[0];
-
-    if (navigator.share && navigator.canShare && navigator.canShare({ title, text, url: shareUrl })) {
-      try {
-        await navigator.share({ title, text, url: shareUrl });
-        return;
-      } catch (err: any) {
-        if (err.name === 'AbortError') return;
-      }
-    }
-
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(shareUrl);
-      } else {
-        const input = document.createElement('input');
-        input.value = shareUrl;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-      }
-      setShareToast('✨ Invitation link copied to clipboard! 📋');
-    } catch {
-      setShareToast('Invitation link: ' + shareUrl);
-    }
-
-    setTimeout(() => {
-      setShareToast(null);
-    }, 3200);
+  // Tasteful Share Functionality (Opens unified WhatsApp, Copy Link & QR Code Modal)
+  const handleShareInvitation = () => {
+    setIsShareModalOpen(true);
   };
 
   // Lightbox navigation
@@ -1257,7 +1229,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                 { href: '#divineBlessingSection', label: 'Divine Shloka', icon: '🕉️' },
                 { href: '#countdownSection', label: 'Sumuhurtham & Countdown', icon: '🪔' },
                 { href: '#coupleSection', label: 'The Bride & Groom', icon: '👫' },
-                { href: '#invitesBySection', label: 'Family & Well Wishers', icon: '🌺' },
+                { href: '#wellWishersSection', label: 'Family & Well Wishers', icon: '🌺' },
                 { href: '#ritualsSection', label: 'Sacred Ceremonies', icon: '🌿' },
                 { href: '#itinerarySection', label: 'Schedule of Events', icon: '📅' },
                 { href: '#venueSection', label: 'Wedding Venue', icon: '🏛️' },
@@ -1300,6 +1272,13 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           </aside>
         </div>
       )}
+
+      {/* GUEST SHARING & WEDDING QR CODE MODAL */}
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        data={data}
+      />
 
       {/* TASTEFUL LINK COPIED TOAST BANNER */}
       {shareToast && (

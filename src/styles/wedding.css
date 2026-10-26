@@ -2911,6 +2911,73 @@ body {
   color: var(--color-sand-muted);
 }
 
+.footer-actions-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.3rem;
+  flex-wrap: wrap;
+}
+
+.footer-share-btn, .footer-replay-btn {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+/* Tasteful Toast Notification Banner */
+.share-toast-banner {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 150;
+  background: linear-gradient(135deg, rgba(59, 11, 20, 0.98) 0%, rgba(38, 8, 13, 0.98) 100%);
+  border: 1.5px solid var(--color-gold-antique);
+  border-radius: 40px;
+  padding: 0.75rem 1.6rem;
+  color: var(--color-gold-light);
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(201, 164, 92, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: toastFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  max-width: 90vw;
+  pointer-events: none;
+}
+
+@keyframes toastFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.form-error-banner {
+  background: rgba(100, 12, 24, 0.75);
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  color: #ffc9c9;
+  font-size: 0.84rem;
+  margin-top: 0.8rem;
+  text-align: center;
+}
+
+.hero-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 /* Quick Navigation Floating Trigger */
 .quick-nav-drawer-trigger {
   position: fixed;

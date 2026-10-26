@@ -193,20 +193,23 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
         autoProceedSeconds={5}
       />
 
-      {/* Accessible Skip Button — Available whenever opening sequence starts */}
-      {cinematicState !== 'closed' && (
-        <button
-          className="cinematic-skip-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleProceedToInvitation();
-          }}
-          type="button"
-          aria-label="Skip cinematic sequence and go directly to Wedding Invitation"
-        >
-          <span>Skip to Invitation →</span>
-        </button>
-      )}
+      {/* Accessible Direct Access / Skip Button — Available at all times for returning visitors */}
+      <button
+        className="cinematic-skip-btn"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleProceedToInvitation();
+        }}
+        type="button"
+        aria-label={
+          cinematicState === 'closed'
+            ? 'Directly enter Wedding Invitation without opening sequence'
+            : 'Skip cinematic sequence and go directly to Wedding Invitation'
+        }
+        title="Direct to Wedding Invitation"
+      >
+        <span>{cinematicState === 'closed' ? 'Direct to Invitation →' : 'Skip to Invitation →'}</span>
+      </button>
     </section>
   );
 };

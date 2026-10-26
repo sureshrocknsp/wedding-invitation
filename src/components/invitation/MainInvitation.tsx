@@ -33,6 +33,13 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   // Off-canvas quick navigation drawer state
   const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
 
+  // Share feedback toast state
+  const [shareToast, setShareToast] = useState<string | null>(null);
+
+  // RSVP submission loading & error state
+  const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
+  const [rsvpErrorMsg, setRsvpErrorMsg] = useState<string | null>(null);
+
   // Personalized guest greeting from URL (?guest= or ?to=)
   const [guestParam, setGuestParam] = useState<string | null>(null);
 
@@ -81,7 +88,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     } catch {}
   }, []);
 
-  // Handle RSVP Submit
+  // Handle RSVP Submit with Loading Feedback
   const handleRsvpSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!rsvpName.trim()) {
@@ -89,6 +96,8 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       return;
     }
     setRsvpNameError(false);
+    setRsvpErrorMsg(null);
+    setIsSubmittingRsvp(true);
 
     const isAttending = rsvpAttendance === 'attending';
     const noteText = rsvpMessage.trim() || (isAttending 
@@ -101,13 +110,18 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       text: noteText
     };
 
-    const updated = [newBlessing, ...blessings];
-    setBlessings(updated);
-    try {
-      localStorage.setItem('wedding_blessings_react_v1', JSON.stringify(updated));
-    } catch {}
-
-    setRsvpSubmitted(true);
+    setTimeout(() => {
+      try {
+        const updated = [newBlessing, ...blessings];
+        setBlessings(updated);
+        localStorage.setItem('wedding_blessings_react_v1', JSON.stringify(updated));
+        setIsSubmittingRsvp(false);
+        setRsvpSubmitted(true);
+      } catch {
+        setIsSubmittingRsvp(false);
+        setRsvpErrorMsg('Unable to save RSVP right now. Please try again.');
+      }
+    }, 450);
   };
 
   const handleResetRsvp = () => {
@@ -115,7 +129,46 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     setRsvpMessage('');
     setRsvpAttendance('attending');
     setRsvpCount('2');
+    setRsvpNameError(false);
+    setRsvpErrorMsg(null);
+    setIsSubmittingRsvp(false);
     setRsvpSubmitted(false);
+  };
+
+  // Tasteful Share Functionality (Web Share API with Clipboard Fallback)
+  const handleShareInvitation = async () => {
+    const title = `${data.couple.bride.name} & ${data.couple.groom.name} — Wedding Invitation`;
+    const text = `You are cordially invited to celebrate the auspicious marriage ceremony of ${data.couple.bride.fullName} and ${data.couple.groom.fullName} on ${data.weddingDateFormatted} at ${data.venue.name}, ${data.venue.city}.`;
+    const shareUrl = window.location.href.split('#')[0];
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ title, text, url: shareUrl })) {
+      try {
+        await navigator.share({ title, text, url: shareUrl });
+        return;
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        const input = document.createElement('input');
+        input.value = shareUrl;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+      }
+      setShareToast('✨ Invitation link copied to clipboard! 📋');
+    } catch {
+      setShareToast('Invitation link: ' + shareUrl);
+    }
+
+    setTimeout(() => {
+      setShareToast(null);
+    }, 3200);
   };
 
   // Lightbox navigation
@@ -296,6 +349,18 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                 <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
               </svg>
               <span>Add to Calendar</span>
+            </button>
+            <button
+              onClick={handleShareInvitation}
+              className="ghost-map-btn hero-share-btn"
+              type="button"
+              aria-label="Share Wedding Invitation"
+              title="Share Invitation"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z" />
+              </svg>
+              <span>Share</span>
             </button>
             <a
               href={data.venue.googleMapsUrl}
@@ -873,9 +938,18 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                     ></textarea>
                   </div>
 
-                  <button type="submit" className="submit-rsvp-btn">
-                    <span>Submit RSVP & Post Blessing</span>
+                  <button
+                    type="submit"
+                    className="submit-rsvp-btn"
+                    disabled={isSubmittingRsvp}
+                  >
+                    <span>{isSubmittingRsvp ? 'Posting Blessings... 🪔' : 'Submit RSVP & Post Blessing'}</span>
                   </button>
+                  {rsvpErrorMsg && (
+                    <div className="form-error-banner" role="alert">
+                      {rsvpErrorMsg}
+                    </div>
+                  )}
                 </form>
               )}
             </div>
@@ -943,15 +1017,26 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
         <p className="footer-copy">
           © 2026 Auspicious Hindu Wedding Celebration • Brundavan Gardens, Parigi, Vikarabad Dist.
         </p>
-        <button
-          onClick={onReplayEntry}
-          className="secondary-btn footer-replay-btn"
-          type="button"
-          style={{ marginTop: '1.2rem', fontSize: '0.8rem', padding: '0.55rem 1.5rem', minHeight: 'auto' }}
-          title="Replay Grand Entrance"
-        >
-          <span>🎬 Replay Grand Entrance</span>
-        </button>
+        <div className="footer-actions-row">
+          <button
+            onClick={handleShareInvitation}
+            className="secondary-btn footer-share-btn"
+            type="button"
+            style={{ fontSize: '0.8rem', padding: '0.55rem 1.4rem', minHeight: 'auto' }}
+            title="Share Wedding Invitation"
+          >
+            <span>💌 Share Invitation</span>
+          </button>
+          <button
+            onClick={onReplayEntry}
+            className="secondary-btn footer-replay-btn"
+            type="button"
+            style={{ fontSize: '0.8rem', padding: '0.55rem 1.4rem', minHeight: 'auto' }}
+            title="Replay Grand Entrance"
+          >
+            <span>🎬 Replay Grand Entrance</span>
+          </button>
+        </div>
       </footer>
 
       {/* LIGHTBOX MODAL */}
@@ -1072,6 +1157,14 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             <div className="nav-drawer-footer">
               <button
                 type="button"
+                onClick={handleShareInvitation}
+                className="primary-btn nav-drawer-share-btn"
+                style={{ width: '100%', marginBottom: '0.65rem', fontSize: '0.8rem', padding: '0.65rem 1rem', minHeight: 'auto' }}
+              >
+                <span>💌 Share Invitation</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => {
                   setIsNavDrawerOpen(false);
                   onReplayEntry();
@@ -1082,6 +1175,13 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               </button>
             </div>
           </aside>
+        </div>
+      )}
+
+      {/* TASTEFUL LINK COPIED TOAST BANNER */}
+      {shareToast && (
+        <div className="share-toast-banner" role="status" aria-live="polite">
+          <span>{shareToast}</span>
         </div>
       )}
     </div>

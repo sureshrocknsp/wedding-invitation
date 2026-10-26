@@ -42,8 +42,10 @@ export const App: React.FC = () => {
   }, []);
 
   const handleAudioStart = useCallback(() => {
-    startMusic();
-    playTempleBell();
+    if (weddingData.music?.enabled !== false) {
+      startMusic();
+      playTempleBell();
+    }
   }, [startMusic, playTempleBell]);
 
   const handleReplayEntry = useCallback(() => {
@@ -54,8 +56,10 @@ export const App: React.FC = () => {
 
   return (
     <div className="wedding-app-root">
-      {/* Floating Audio Toggle */}
-      <AudioToggle isPlaying={isPlaying} onToggle={toggleMusic} />
+      {/* Floating Audio Toggle - Guided by weddingData.music.enabled */}
+      {weddingData.music?.enabled !== false && (
+        <AudioToggle isPlaying={isPlaying} onToggle={toggleMusic} />
+      )}
 
       {/* Opening Cinematic Stage */}
       {!isEntranceDismissed && (

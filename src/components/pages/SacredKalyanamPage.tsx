@@ -80,14 +80,14 @@ export const SacredKalyanamPage: React.FC<SacredKalyanamPageProps> = ({
                 tabIndex={0}
               >
                 <img
-                  src="/assets/images/divine_blessings.jpg"
+                  src={data.assets?.divineBlessings || "/assets/images/divine_blessings.jpg"}
                   alt="Supreme Deities Showering Divine Blessings upon Lahari and Shiva Kumar"
                   className="divine-blessings-img"
                   onError={(e) => {
                     const current = e.currentTarget;
                     if (!current.dataset.fallbackTried) {
                       current.dataset.fallbackTried = 'true';
-                      current.src = '/assets/images/mandapam_stage.jpg';
+                      current.src = data.assets?.mandapamStage || '/assets/images/mandapam_stage.jpg';
                     }
                   }}
                 />

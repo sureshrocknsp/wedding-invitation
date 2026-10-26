@@ -169,12 +169,13 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
       aria-label="Cinematic Hindu Wedding Entrance and Vinayaka Reveal"
     >
       {/* Layer 1 (BACKGROUND): Realistic Vinayaka Kalyana Mandapam Interior Scene */}
-      <WeddingInterior state={cinematicState} />
+      <WeddingInterior state={cinematicState} assets={data.assets} />
 
       {/* Layer 2 (MIDDLE): Realistic 3D Hinged Double Doors & Foreground Architectural Arch */}
       <WeddingDoors
         state={cinematicState}
         onTapToEnter={handleOpenDoors}
+        assets={data.assets}
       />
 
       {/* Layer 3 (FOREGROUND): Couple Names Reveal Card (Shown after camera settles) */}

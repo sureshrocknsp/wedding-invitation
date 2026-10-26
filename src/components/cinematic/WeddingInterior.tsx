@@ -1,17 +1,22 @@
 import React from 'react';
 import { VinayakaReveal } from './VinayakaReveal';
 import { CinematicState } from './WeddingEntrance';
+import { WeddingData } from '../../data/weddingData';
 
 interface WeddingInteriorProps {
   state: CinematicState;
+  assets?: WeddingData['assets'];
 }
 
-export const WeddingInterior: React.FC<WeddingInteriorProps> = ({ state }) => {
+export const WeddingInterior: React.FC<WeddingInteriorProps> = ({ state, assets }) => {
   const isOpening = state !== 'closed';
   const isGoldenLightActive = state === 'opening' || state === 'revealing' || state === 'settling' || state === 'invitation';
   const isMandapamRevealed = state === 'revealing' || state === 'settling' || state === 'invitation';
   const isCameraSettling = state === 'settling' || state === 'invitation';
   const isInvitationState = state === 'invitation';
+
+  const webpSrc = assets?.vinayakaMandapamWebp || '/images/wedding/vinayaka-mandapam.webp';
+  const jpgSrc = assets?.vinayakaMandapamJpg || '/assets/images/vinayaka_mandapam.jpg';
 
   return (
     <div
@@ -25,9 +30,9 @@ export const WeddingInterior: React.FC<WeddingInteriorProps> = ({ state }) => {
       {/* Realistic Kalyana Mandapam Backdrop with Lord Vinayaka Centered */}
       <div className="mandapam-photo-wrapper">
         <picture>
-          <source srcSet="/images/wedding/vinayaka-mandapam.webp" type="image/webp" />
+          <source srcSet={webpSrc} type="image/webp" />
           <img
-            src="/assets/images/vinayaka_mandapam.jpg"
+            src={jpgSrc}
             alt="Lord Vinayaka in Grand Traditional Floral Mandapam"
             className="mandapam-photo-img"
             loading="eager"
@@ -36,7 +41,7 @@ export const WeddingInterior: React.FC<WeddingInteriorProps> = ({ state }) => {
               const current = e.currentTarget;
               if (!current.dataset.fallbackTried) {
                 current.dataset.fallbackTried = 'true';
-                current.src = '/images/wedding/vinayaka-mandapam.webp';
+                current.src = webpSrc;
               }
             }}
           />

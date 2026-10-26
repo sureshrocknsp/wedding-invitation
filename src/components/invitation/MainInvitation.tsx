@@ -24,7 +24,9 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   // RSVP state
   const [rsvpName, setRsvpName] = useState('');
   const [rsvpAttendance, setRsvpAttendance] = useState<'attending' | 'declined'>('attending');
-  const [rsvpCount, setRsvpCount] = useState<string>('2');
+  const [rsvpCount, setRsvpCount] = useState<string>(
+    data.rsvp.guestCountOptions?.[1] || '2 Persons'
+  );
   const [rsvpMessage, setRsvpMessage] = useState('');
   const [rsvpNameError, setRsvpNameError] = useState(false);
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
@@ -49,11 +51,31 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     if (g) setGuestParam(g);
   }, []);
 
-  // Countdown logic
+  // Dynamically synchronize page title and social meta tags from centralized configuration
+  useEffect(() => {
+    if (data.socialSharing?.pageTitle) {
+      document.title = data.socialSharing.pageTitle;
+    }
+    if (data.socialSharing?.metaDescription) {
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', data.socialSharing.metaDescription);
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', data.socialSharing.ogDescription || data.socialSharing.metaDescription);
+    }
+    if (data.socialSharing?.ogTitle) {
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', data.socialSharing.ogTitle);
+    }
+  }, [data.socialSharing]);
+
+  // Robust Countdown logic tied directly to centralized weddingDate with safeguards
   useEffect(() => {
     if (!data.weddingDate) return;
     const target = new Date(data.weddingDate).getTime();
-    if (isNaN(target)) return;
+    if (isNaN(target)) {
+      setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      return;
+    }
 
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -70,7 +92,12 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      setTimeLeft({ days, hours, minutes, seconds });
+      setTimeLeft({
+        days: Math.max(0, days),
+        hours: Math.max(0, hours),
+        minutes: Math.max(0, minutes),
+        seconds: Math.max(0, seconds)
+      });
     };
 
     updateCountdown();
@@ -101,7 +128,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
     const isAttending = rsvpAttendance === 'attending';
     const noteText = rsvpMessage.trim() || (isAttending 
-      ? `Joyfully celebrating with Shiva Kumar & Lahari! (${rsvpCount} ${rsvpCount === '1' ? 'person' : 'persons'} attending)` 
+      ? `Joyfully celebrating with ${data.couple.groom.name} & ${data.couple.bride.name}! (${rsvpCount} attending)` 
       : 'Sending our heartfelt blessings & warmest wishes to the couple!');
 
     const newBlessing = {
@@ -128,7 +155,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     setRsvpName('');
     setRsvpMessage('');
     setRsvpAttendance('attending');
-    setRsvpCount('2');
+    setRsvpCount(data.rsvp.guestCountOptions?.[1] || '2 Persons');
     setRsvpNameError(false);
     setRsvpErrorMsg(null);
     setIsSubmittingRsvp(false);
@@ -137,8 +164,8 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
   // Tasteful Share Functionality (Web Share API with Clipboard Fallback)
   const handleShareInvitation = async () => {
-    const title = `${data.couple.bride.name} & ${data.couple.groom.name} — Wedding Invitation`;
-    const text = `You are cordially invited to celebrate the auspicious marriage ceremony of ${data.couple.bride.fullName} and ${data.couple.groom.fullName} on ${data.weddingDateFormatted} at ${data.venue.name}, ${data.venue.city}.`;
+    const title = data.socialSharing?.ogTitle || `${data.couple.bride.name} & ${data.couple.groom.name} — Wedding Invitation`;
+    const text = data.socialSharing?.shareTextEnglish || `You are cordially invited to celebrate the auspicious marriage ceremony of ${data.couple.bride.fullName} and ${data.couple.groom.fullName} on ${data.weddingDateFormatted} at ${data.venue.name}, ${data.venue.city}.`;
     const shareUrl = window.location.href.split('#')[0];
 
     if (navigator.share && navigator.canShare && navigator.canShare({ title, text, url: shareUrl })) {
@@ -209,13 +236,24 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     return () => window.removeEventListener('keydown', handleKey);
   }, [isNavDrawerOpen]);
 
-  // Add to Calendar
+  // Add to Calendar using centralized date, time and venue data
   const handleAddToCalendar = () => {
-    const title = `Wedding of Lahari (Shireesha) & Shiva Kumar Yadav`;
-    const desc = `You are cordially invited to celebrate the auspicious marriage ceremony & Sumuhurtham of Chi.La.Sow. Lahari (Shireesha) and Chi. Shiva Kumar Yadav at Brundavan Gardens, Kodangal Road, Parigi, Vikarabad Dist.`;
+    const title = `Wedding of ${data.couple.bride.fullName} & ${data.couple.groom.fullName}`;
+    const desc = `${data.invitationNoteEnglish}\n\nVenue: ${data.venue.name}, ${data.venue.address}, ${data.venue.city}, ${data.venue.state}`;
     const loc = `${data.venue.name}, ${data.venue.address}, ${data.venue.city}, ${data.venue.state} ${data.venue.pincode}`;
-    const start = '20261101T061700Z'; // Sunday 01-Nov-2026 11:47 AM IST (06:17 UTC)
-    const end = '20261101T113000Z';   // 05:00 PM IST
+    
+    // Convert configured weddingDate (ISO format) to UTC calendar dates
+    let start = '20261101T061700Z'; // 11:47 AM IST = 06:17 UTC
+    let end = '20261101T113000Z';   // 05:00 PM IST = 11:30 UTC
+    try {
+      const wDate = new Date(data.weddingDate);
+      if (!isNaN(wDate.getTime())) {
+        const formatCalTime = (d: Date) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        start = formatCalTime(wDate);
+        const endDate = new Date(wDate.getTime() + 4 * 60 * 60 * 1000); // 4 hours window
+        end = formatCalTime(endDate);
+      }
+    } catch {}
 
     const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
       title
@@ -225,13 +263,15 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     window.open(url, '_blank');
   };
 
+  const heroBg = data.assets?.mandapamStage || '/assets/images/mandapam_stage.jpg';
+
   return (
     <div className="main-invitation-wrapper" id="mainInvitationContent">
       {/* 1. HERO INVITATION SECTION */}
       <section
         id="heroInvitation"
         className="hero-invitation-section"
-        style={{ backgroundImage: `url('/assets/images/mandapam_stage.jpg')` }}
+        style={{ backgroundImage: `url('${heroBg}')` }}
       >
         <div className="hero-backdrop-overlay"></div>
 
@@ -266,9 +306,11 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           {/* 2. BRIDE NAME & 3. AMPERSAND & 4. GROOM NAME */}
           <div className="hero-couple-showcase">
             <div className="couple-name-row bride-row">
-              <span className="formal-prefix">Chi.La.Sow.</span>
-              <span className="couple-name-script gold-shimmer-text">Lahari</span>
-              <span className="couple-alias-badge">(Shireesha)</span>
+              <span className="formal-prefix">{data.couple.bride.formalTitle || 'Chi.La.Sow.'}</span>
+              <span className="couple-name-script gold-shimmer-text">{data.couple.bride.name}</span>
+              {data.couple.bride.aliasName && (
+                <span className="couple-alias-badge">({data.couple.bride.aliasName})</span>
+              )}
               <span className="telugu-single-name">{data.couple.bride.teluguName}</span>
             </div>
 
@@ -279,8 +321,11 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             </div>
 
             <div className="couple-name-row groom-row">
-              <span className="formal-prefix">Chi.</span>
+              <span className="formal-prefix">{data.couple.groom.formalTitle || 'Chi.'}</span>
               <span className="couple-name-script gold-shimmer-text">{data.couple.groom.name}</span>
+              {data.couple.groom.aliasName && (
+                <span className="couple-alias-badge">({data.couple.groom.aliasName})</span>
+              )}
               <span className="telugu-single-name">{data.couple.groom.teluguName}</span>
             </div>
           </div>
@@ -383,7 +428,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               "శ్లో॥ ఆదిత్యాది గ్రహాస్సర్వే స్వనక్షత్ర స్వరాశయః | కుర్వంతు మంగళం తాభ్యాం యయోరుద్వాహ పత్రికా ॥"
             </h3>
             <p className="ceremony-hero-desc">
-              May the divine celestial deities bless Chi. Shiva Kumar Yadav and Chi.La.Sow. Lahari
+              May the divine celestial deities bless {data.couple.groom.fullName} and {data.couple.bride.fullName}
               with lifelong health, prosperity, harmony, and eternal companionships.
             </p>
           </div>
@@ -436,7 +481,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                 సుముహూర్తం: <strong>{data.astrology.teluguLagnam}</strong> | నక్షత్రం: <strong>{data.astrology.teluguNakshatram}</strong> | తిథి: <strong>{data.astrology.teluguTithi}</strong>
               </p>
               <div className="astrology-english-sub">
-                Lagnam: <strong>{data.astrology.lagnam}</strong> • Nakshatram: <strong>{data.astrology.nakshatram}</strong> • Time: <strong>11:47 AM</strong>
+                Lagnam: <strong>{data.astrology.lagnam}</strong> • Nakshatram: <strong>{data.astrology.nakshatram}</strong> • Time: <strong>{data.muhurthamTime}</strong>
               </div>
             </div>
           </div>
@@ -469,7 +514,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                     const current = e.currentTarget;
                     if (!current.dataset.fallbackTried) {
                       current.dataset.fallbackTried = 'true';
-                      current.src = '/assets/images/couple_portrait.jpg';
+                      current.src = data.assets?.couplePortrait || '/assets/images/couple_portrait.jpg';
                     }
                   }}
                 />
@@ -499,7 +544,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                     const current = e.currentTarget;
                     if (!current.dataset.fallbackTried) {
                       current.dataset.fallbackTried = 'true';
-                      current.src = '/assets/images/couple_portrait.jpg';
+                      current.src = data.assets?.couplePortrait || '/assets/images/couple_portrait.jpg';
                     }
                   }}
                 />
@@ -644,7 +689,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                       const current = e.currentTarget;
                       if (!current.dataset.fallbackTried) {
                         current.dataset.fallbackTried = 'true';
-                        current.src = '/assets/images/mandapam_stage.jpg';
+                        current.src = data.assets?.mandapamStage || '/assets/images/mandapam_stage.jpg';
                       }
                     }}
                   />
@@ -694,21 +739,28 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                   <div className="timeline-timing">
                     ⏰ {e.time} | {e.venue}
                   </div>
-                  <p className="timeline-desc">{e.description}</p>
-                  <div className="timeline-directions-row">
-                    <a
-                      href={data.venue.googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="event-directions-link"
-                      title={`View directions to ${e.venue}`}
-                    >
-                      <span>📍 View Directions</span>
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                      </svg>
-                    </a>
-                  </div>
+                  {e.address && (
+                    <div className="timeline-venue-address" style={{ fontSize: '0.82rem', color: '#e8d5a5', marginTop: '0.25rem' }}>
+                      📍 {e.address}
+                    </div>
+                  )}
+                  {e.description && <p className="timeline-desc">{e.description}</p>}
+                  {(e.mapUrl || data.venue.googleMapsUrl) && (
+                    <div className="timeline-directions-row">
+                      <a
+                        href={e.mapUrl || data.venue.googleMapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="event-directions-link"
+                        title={`View directions to ${e.venue}`}
+                      >
+                        <span>📍 View Directions</span>
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -733,49 +785,61 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             <div className="venue-details">
               <span className="section-tag">Kalyana Vedika</span>
               <h3 className="venue-name-title">{data.venue.name}</h3>
-              <div className="venue-telugu-name-large">{data.venue.teluguName}</div>
+              {data.venue.teluguName && (
+                <div className="venue-telugu-name-large">{data.venue.teluguName}</div>
+              )}
               <p className="venue-address-text">
                 <strong>{data.venue.address}</strong>
                 <br />
                 {data.venue.city}, {data.venue.district}, {data.venue.state} - {data.venue.pincode}
-                <br />
-                <span className="venue-landmark">Landmark: {data.venue.landmark}</span>
+                {data.venue.landmark && (
+                  <>
+                    <br />
+                    <span className="venue-landmark">Landmark: {data.venue.landmark}</span>
+                  </>
+                )}
               </p>
 
-              <ul className="venue-amenities-list">
-                {data.venue.amenities.map((item, idx) => (
-                  <li key={idx}>
-                    <svg viewBox="0 0 24 24">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+              {data.venue.amenities && data.venue.amenities.length > 0 && (
+                <ul className="venue-amenities-list">
+                  {data.venue.amenities.map((item, idx) => (
+                    <li key={idx}>
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {data.venue.googleMapsUrl && (
+                <div className="venue-cta-row">
+                  <a
+                    href={data.venue.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="primary-btn"
+                  >
+                    <span>View Location / Directions</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                     </svg>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+                  </a>
+                </div>
+              )}
+            </div>
 
-              <div className="venue-cta-row">
-                <a
-                  href={data.venue.googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="primary-btn"
-                >
-                  <span>View Location / Directions</span>
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                  </svg>
-                </a>
+            {data.venue.embedMapUrl && (
+              <div className="venue-map-container">
+                <iframe
+                  src={data.venue.embedMapUrl}
+                  loading="lazy"
+                  title={`${data.venue.name} Location Map`}
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
               </div>
-            </div>
-
-            <div className="venue-map-container">
-              <iframe
-                src={data.venue.embedMapUrl}
-                loading="lazy"
-                title="Brundavan Gardens Parigi Vikarabad Map"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -794,32 +858,40 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           </div>
 
           <div className="gallery-grid">
-            {data.gallery.map((g, idx) => (
-              <div
-                key={idx}
-                className="gallery-item"
-                onClick={() => openLightbox(idx)}
-                role="button"
-                tabIndex={0}
-              >
-                <img
-                  src={g.src}
-                  alt={g.title}
-                  loading="lazy"
-                  onError={(e) => {
-                    const current = e.currentTarget;
-                    if (!current.dataset.fallbackTried) {
-                      current.dataset.fallbackTried = 'true';
-                      current.src = '/assets/images/mandapam_stage.jpg';
-                    }
-                  }}
-                />
-                <div className="gallery-overlay-hover">
-                  <span className="gallery-icon-zoom">🔍</span>
-                  <span className="gallery-title-text">{g.title}</span>
-                </div>
-              </div>
-            ))}
+            {data.gallery && data.gallery.length > 0 ? (
+              data.gallery
+                .filter((g) => g && g.src)
+                .map((g, idx) => (
+                  <div
+                    key={idx}
+                    className="gallery-item"
+                    onClick={() => openLightbox(idx)}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <img
+                      src={g.src}
+                      alt={g.title}
+                      loading="lazy"
+                      onError={(e) => {
+                        const current = e.currentTarget;
+                        if (!current.dataset.fallbackTried) {
+                          current.dataset.fallbackTried = 'true';
+                          current.src = data.assets?.mandapamStage || '/assets/images/mandapam_stage.jpg';
+                        }
+                      }}
+                    />
+                    <div className="gallery-overlay-hover">
+                      <span className="gallery-icon-zoom">🔍</span>
+                      <span className="gallery-title-text">{g.title}</span>
+                    </div>
+                  </div>
+                ))
+            ) : (
+              <p className="no-gallery-msg" style={{ textAlign: 'center', color: '#d7c8b9', padding: '2rem' }}>
+                Wedding photographs and celebration albums will be shared soon.
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -839,13 +911,38 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
 
           <div className="rsvp-layout-grid">
             <div className="rsvp-form-box">
-              {rsvpSubmitted ? (
+              {!data.rsvp.enabled ? (
+                <div
+                  className="rsvp-disabled-notice"
+                  role="status"
+                  style={{
+                    padding: '2.5rem 1.5rem',
+                    textAlign: 'center',
+                    background: 'rgba(38, 8, 13, 0.65)',
+                    border: '1px solid rgba(201, 164, 92, 0.35)',
+                    borderRadius: '12px'
+                  }}
+                >
+                  <div className="disabled-icon" style={{ fontSize: '2.5rem', marginBottom: '0.8rem' }}>💌</div>
+                  <h4 className="disabled-title gold-text" style={{ fontSize: '1.25rem', marginBottom: '0.6rem', fontFamily: 'Cinzel, Georgia, serif' }}>
+                    RSVP Concluded
+                  </h4>
+                  <p className="disabled-desc" style={{ color: '#d7c8b9', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                    {data.rsvp.disabledMessage || 'Online RSVP submissions have concluded for this auspicious celebration. Please contact the family directly with any inquiries.'}
+                  </p>
+                </div>
+              ) : rsvpSubmitted ? (
                 <div className="rsvp-success-banner" role="status" aria-live="polite">
                   <div className="success-icon">✨ 💌 🪔</div>
                   <h4 className="success-title gold-text">RSVP Received with Joy!</h4>
                   <p className="success-msg">
-                    Thank you, <strong>{rsvpName}</strong>. Your response ({rsvpAttendance === 'attending' ? `Attending with ${rsvpCount} ${rsvpCount === '1' ? 'person' : 'persons'}` : 'Warmly wishing from afar'}) and heartfelt blessings have been added to our celebration wall.
+                    Thank you, <strong>{rsvpName}</strong>. Your response ({rsvpAttendance === 'attending' ? `Attending with ${rsvpCount}` : 'Warmly wishing from afar'}) and heartfelt blessings have been added to our celebration wall.
                   </p>
+                  {data.rsvp.confirmationNote && (
+                    <p className="confirmation-note" style={{ color: '#c9a45c', fontSize: '0.9rem', marginTop: '0.75rem', fontStyle: 'italic' }}>
+                      {data.rsvp.confirmationNote}
+                    </p>
+                  )}
                   <button
                     type="button"
                     onClick={handleResetRsvp}
@@ -915,11 +1012,14 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                         value={rsvpCount}
                         onChange={(e) => setRsvpCount(e.target.value)}
                       >
-                        <option value="1">1 Person</option>
-                        <option value="2">2 Persons</option>
-                        <option value="3">3 Persons</option>
-                        <option value="4">4 Persons</option>
-                        <option value="5+">5+ Persons (Family)</option>
+                        {(data.rsvp.guestCountOptions && data.rsvp.guestCountOptions.length > 0
+                          ? data.rsvp.guestCountOptions
+                          : ['1 Person', '2 Persons', '3 Persons', '4 Persons', '5+ Persons (Family)']
+                        ).map((opt, idx) => (
+                          <option key={idx} value={opt}>
+                            {opt}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   )}
@@ -932,7 +1032,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                       id="rsvpMessage"
                       className="form-textarea"
                       rows={3}
-                      placeholder="Write your heartfelt blessings for Shiva Kumar & Lahari..."
+                      placeholder={`Write your heartfelt blessings for ${data.couple.groom.name} & ${data.couple.bride.name}...`}
                       value={rsvpMessage}
                       onChange={(e) => setRsvpMessage(e.target.value)}
                     ></textarea>
@@ -992,10 +1092,12 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               <br />
               <strong>With Warmest Regards & Deepest Gratitude:</strong>
               <br />
-              <strong>Devarakonda & Gadde Families</strong>
+              <strong>
+                {data.invitesBy.parentsEnglish.join(' & ')} & Family
+              </strong>
               <br />
               <span style={{ color: '#d4af37', fontSize: '0.95rem' }}>
-                దేవరకొండ మరియు గద్దె కుటుంబ సభ్యులు
+                {data.invitesBy.parentsTelugu.join(' మరియు ')} మరియు కుటుంబ సభ్యులు
               </span>
             </p>
 
@@ -1012,10 +1114,10 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
       {/* FOOTER */}
       <footer className="wedding-footer">
         <div className="footer-couple-names">
-          Lahari & Shiva Kumar Yadav
+          {data.couple.bride.name} & {data.couple.groom.name}
         </div>
         <p className="footer-copy">
-          © 2026 Auspicious Hindu Wedding Celebration • Brundavan Gardens, Parigi, Vikarabad Dist.
+          © {new Date(data.weddingDate).getFullYear() || 2026} Auspicious Hindu Wedding Celebration • {data.venue.name}, {data.venue.city}, {data.venue.district}.
         </p>
         <div className="footer-actions-row">
           <button

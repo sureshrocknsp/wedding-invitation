@@ -18,6 +18,7 @@ export interface WeddingData {
       name: string;
       formalTitle: string;
       fullName: string;
+      aliasName?: string;
       teluguName: string;
       role: string;
       teluguRole: string;
@@ -83,6 +84,8 @@ export interface WeddingData {
     teluguName?: string;
     time: string;
     venue: string;
+    address?: string;
+    mapUrl?: string;
     description: string;
     icon: string;
     isPrimary?: boolean;
@@ -104,11 +107,44 @@ export interface WeddingData {
   rsvp: {
     enabled: boolean;
     deadline: string;
+    guestCountOptions: string[];
+    confirmationNote: string;
+    disabledMessage?: string;
     initialBlessings: Array<{
       name: string;
       time: string;
       text: string;
     }>;
+  };
+  assets: {
+    grandEntranceBackground: string;
+    entranceAltBackground: string;
+    portalFrame: string;
+    doorLeafLeft: string;
+    doorLeafRight: string;
+    vinayakaMandapamWebp: string;
+    vinayakaMandapamJpg: string;
+    couplePortrait: string;
+    mandapamStage: string;
+    divineBlessings: string;
+    originalWeddingCard: string;
+  };
+  socialSharing: {
+    pageTitle: string;
+    metaDescription: string;
+    keywords: string;
+    ogTitle: string;
+    ogDescription: string;
+    previewImage: string;
+    shareTextEnglish: string;
+    shareTextTelugu: string;
+  };
+  music: {
+    enabled: boolean;
+    autoPlayPrompt: boolean;
+    initialVolume: number;
+    raga: string;
+    tonic: string;
   };
 }
 
@@ -372,6 +408,9 @@ export const weddingData: WeddingData = {
   rsvp: {
     enabled: true,
     deadline: "October 30, 2026",
+    guestCountOptions: ["1 Person", "2 Persons", "3 Persons", "4 Persons", "5+ Persons (Family)"],
+    confirmationNote: "Thank you for sharing in our holy wedding happiness! Your warm wishes and RSVP have been noted.",
+    disabledMessage: "RSVP for this auspicious ceremony has concluded. We warmly look forward to your presence and blessings!",
     initialBlessings: [
       {
         name: "Devarakonda Family (Bride's Parents)",
@@ -389,5 +428,35 @@ export const weddingData: WeddingData = {
         text: "Warmest congratulations and best wishes for a lifetime of love, happiness, and prosperity!"
       }
     ]
+  },
+  assets: {
+    grandEntranceBackground: "/images/wedding/grand-entrance.webp",
+    entranceAltBackground: "/assets/images/grand_doors.jpg",
+    portalFrame: "/assets/images/grand_doors_portal_frame.png",
+    doorLeafLeft: "/assets/images/door_leaf_left.jpg",
+    doorLeafRight: "/assets/images/door_leaf_right.jpg",
+    vinayakaMandapamWebp: "/images/wedding/vinayaka-mandapam.webp",
+    vinayakaMandapamJpg: "/assets/images/vinayaka_mandapam.jpg",
+    couplePortrait: "/assets/images/couple_portrait.jpg",
+    mandapamStage: "/assets/images/mandapam_stage.jpg",
+    divineBlessings: "/assets/images/divine_blessings.jpg",
+    originalWeddingCard: "/assets/images/original_wedding_card.jpg"
+  },
+  socialSharing: {
+    pageTitle: "Lahari & Shiva Kumar Yadav — Royal Wedding Invitation | బృందావన్ గార్డెన్స్, పరిగి",
+    metaDescription: "Sacred Telugu Hindu Wedding Invitation of Chi.La.Sow. Lahari (Shireesha) & Chi. Shiva Kumar Yadav. Sumuhurtham: Sunday, 1st November 2026 at 11:47 AM at Brundavan Gardens, Parigi, Vikarabad.",
+    keywords: "Lahari Shiva Kumar Wedding, Telugu Wedding Invitation, Brundavan Gardens Parigi, Devarakonda Anjamma, Gadde Yashodha, Vikarabad Wedding, Sumuhurtham",
+    ogTitle: "Lahari & Shiva Kumar Yadav — Wedding Invitation (వివాహ ఆహ్వాన పత్రిక)",
+    ogDescription: "We solicit your gracious presence on the auspicious wedding of Chi.La.Sow. Lahari (Shireesha) with Chi. Shiva Kumar Yadav at Brundavan Gardens, Parigi.",
+    previewImage: "/assets/images/grand_doors.jpg",
+    shareTextEnglish: "You are cordially invited to celebrate the auspicious marriage ceremony of Chi.La.Sow. Lahari (Shireesha) and Chi. Shiva Kumar Yadav on Sunday, 1st November 2026 at Brundavan Gardens, Parigi.",
+    shareTextTelugu: "శ్రీరస్తు • శుభమస్తు • కళ్యాణమస్తు: చి॥ల॥సౌ॥ లహరి (శిరీష) మరియు చి॥ శివకుమార్ యాదవ్ ల వివాహ మహోత్సవ ఆహ్వాన పత్రిక."
+  },
+  music: {
+    enabled: true,
+    autoPlayPrompt: true,
+    initialVolume: 0.85,
+    raga: "Gambheera Nattai / Kalyani",
+    tonic: "D (Panchama Shruti)"
   }
 };

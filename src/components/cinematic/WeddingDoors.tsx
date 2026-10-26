@@ -4,9 +4,15 @@ import { CinematicState } from './WeddingEntrance';
 interface WeddingDoorsProps {
   state: CinematicState;
   onTapToEnter: () => void;
+  assets?: {
+    doorLeafLeft?: string;
+    doorLeafRight?: string;
+    portalFrame?: string;
+    grandEntranceBackground?: string;
+  };
 }
 
-export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter }) => {
+export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter, assets }) => {
   const isClosed = state === 'closed';
   const isOpening = state === 'opening';
   const isRevealing = state === 'revealing';
@@ -16,6 +22,10 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter 
   const isDoorOpen = isOpening || isRevealing || isSettling || isInvitation;
   const isGoldenLightActive = isOpening || isRevealing;
   const isPortalDissolved = isSettling || isInvitation;
+
+  const leftDoorSrc = assets?.doorLeafLeft || '/assets/images/door_leaf_left.jpg';
+  const rightDoorSrc = assets?.doorLeafRight || '/assets/images/door_leaf_right.jpg';
+  const portalFrameSrc = assets?.portalFrame || '/assets/images/grand_doors_portal_frame.png';
 
   return (
     <div
@@ -49,7 +59,7 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter 
               {/* LEFT DOOR LEAF */}
               <div className="portal-door-panel door-leaf-left" id="doorLeafLeft">
                 <img
-                  src="/assets/images/door_leaf_left.jpg"
+                  src={leftDoorSrc}
                   alt="Left Carved Wooden Door"
                   className="door-leaf-img"
                   draggable={false}
@@ -64,7 +74,7 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter 
               {/* RIGHT DOOR LEAF */}
               <div className="portal-door-panel door-leaf-right" id="doorLeafRight">
                 <img
-                  src="/assets/images/door_leaf_right.jpg"
+                  src={rightDoorSrc}
                   alt="Right Carved Wooden Door"
                   className="door-leaf-img"
                   draggable={false}
@@ -88,7 +98,7 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter 
 
           {/* 2. In front of the doors: The Grand Portal Frame with transparent doorway */}
           <img
-            src="/assets/images/grand_doors_portal_frame.png"
+            src={portalFrameSrc}
             alt="Grand Entrance Stone Pillars, Garlands and Arch"
             className="portal-proscenium-frame-img"
             draggable={false}

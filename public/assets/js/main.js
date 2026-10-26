@@ -377,102 +377,14 @@
   const audioEngine = new IndianWeddingAudioEngine();
 
   // =========================================================================
-  // 4. CANVAS FLOWER PETAL PARTICLE PHYSICS (SECTION 25)
+  // 4. CANVAS FLOWER PETAL PARTICLE SYSTEM REMOVED (PHASE 4 & 5 ZERO-PETALS POLICY)
   // =========================================================================
   class PetalParticleSystem {
-    constructor() {
-      this.canvas = document.getElementById('petalCanvas');
-      if (!this.canvas) return;
-      this.ctx = this.canvas.getContext('2d');
-      this.petals = [];
-      this.maxPetals = 40;
-      this.colors = [
-        '#ffb703', // Marigold Yellow
-        '#fb8500', // Marigold Orange
-        '#e63946', // Rose Crimson
-        '#f8f9fa', // Jasmine White
-        '#ffd166'  // Golden Petal
-      ];
-      this.resize();
-      this.init();
-      window.addEventListener('resize', () => this.resize());
-    }
-
-    resize() {
-      if (!this.canvas) return;
-      this.canvas.width = window.innerWidth;
-      this.canvas.height = window.innerHeight;
-    }
-
-    init() {
-      for (let i = 0; i < this.maxPetals; i++) {
-        this.petals.push(this.createPetal(Math.random() * this.canvas.width, Math.random() * this.canvas.height));
-      }
-      this.animate();
-    }
-
-    createPetal(x, y, isBurst = false) {
-      return {
-        x: x || Math.random() * this.canvas.width,
-        y: y !== undefined ? y : -20,
-        size: 7 + Math.random() * 11,
-        color: this.colors[Math.floor(Math.random() * this.colors.length)],
-        speedX: isBurst ? (Math.random() - 0.5) * 7.5 : (Math.random() - 0.5) * 1.4,
-        speedY: isBurst ? -2 - Math.random() * 5.5 : 0.9 + Math.random() * 2.0,
-        rotation: Math.random() * 360,
-        rotationSpeed: (Math.random() - 0.5) * 1.8,
-        oscillationSpeed: 0.02 + Math.random() * 0.03,
-        oscillationAngle: Math.random() * Math.PI * 2,
-        opacity: 0.75 + Math.random() * 0.25,
-        isBurst: isBurst
-      };
-    }
-
-    burst(x, y, count = 50) {
-      for (let i = 0; i < count; i++) {
-        this.petals.push(this.createPetal(x, y, true));
-      }
-    }
-
-    animate() {
-      if (!this.ctx) return;
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-      for (let i = this.petals.length - 1; i >= 0; i--) {
-        const p = this.petals[i];
-        p.oscillationAngle += p.oscillationSpeed;
-        p.x += p.speedX + Math.sin(p.oscillationAngle) * 0.75;
-        p.y += p.speedY;
-        p.rotation += p.rotationSpeed;
-
-        if (p.isBurst) {
-          p.speedY += 0.14; // Gravity
-          p.speedX *= 0.98; // Air resistance
-        }
-
-        // Render delicate organic petal ellipse
-        this.ctx.save();
-        this.ctx.translate(p.x, p.y);
-        this.ctx.rotate((p.rotation * Math.PI) / 180);
-        this.ctx.globalAlpha = p.opacity;
-        this.ctx.fillStyle = p.color;
-        this.ctx.beginPath();
-        this.ctx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
-        this.ctx.fill();
-        this.ctx.restore();
-
-        // Recycle petal when falling off screen
-        if (p.y > this.canvas.height + 30 || p.x < -40 || p.x > this.canvas.width + 40) {
-          if (p.isBurst) {
-            this.petals.splice(i, 1);
-          } else {
-            this.petals[i] = this.createPetal(Math.random() * this.canvas.width, -20);
-          }
-        }
-      }
-
-      requestAnimationFrame(() => this.animate());
-    }
+    constructor() {}
+    burst() {}
+    resize() {}
+    init() {}
+    animate() {}
   }
 
   const petalSystem = new PetalParticleSystem();

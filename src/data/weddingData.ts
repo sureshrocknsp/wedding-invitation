@@ -126,6 +126,8 @@ export interface WeddingData {
     vinayakaMandapamWebp: string;
     vinayakaMandapamJpg: string;
     couplePortrait: string;
+    bridePortrait: string;
+    groomPortrait: string;
     mandapamStage: string;
     divineBlessings: string;
     originalWeddingCard: string;
@@ -162,7 +164,7 @@ export const weddingData: WeddingData = {
       parents: "Smt. Devarakonda Anjamma & Sri Devarakonda Yadaiah Yadav",
       teluguParents: "శ్రీమతి దేవరకొండ అంజమ్మ - శ్రీ దేవరకొండ యాదయ్య యాదవ్",
       quote: "Two souls united by destiny, blessed by traditions, and bound by timeless love.",
-      photo: "/assets/images/couple_portrait.jpg"
+      photo: "/assets/images/bride_portrait.jpg"
     },
     groom: {
       name: "Shiva Kumar Yadav",
@@ -176,7 +178,7 @@ export const weddingData: WeddingData = {
       residence: "Residents of Raghavapur",
       teluguResidence: "రాఘవాపూర్ వాసులు",
       quote: "Stepping into a sacred lifelong journey with divine grace, loving family blessings, and eternal devotion.",
-      photo: "/assets/images/couple_portrait.jpg"
+      photo: "/assets/images/groom_portrait.jpg"
     },
     hashtag: "#ShivaWedsLahari"
   },
@@ -370,6 +372,18 @@ export const weddingData: WeddingData = {
       category: "Divine"
     },
     {
+      src: "/assets/images/bride_portrait.jpg",
+      title: "చి॥ల॥సౌ॥ లహరి (శిరీష) — The Bride",
+      caption: "Chi.La.Sow. Lahari in sacred Kalyana Pattu & ornate traditional floral frame",
+      category: "Couple"
+    },
+    {
+      src: "/assets/images/groom_portrait.jpg",
+      title: "చి॥ శివకుమార్ యాదవ్ — The Groom",
+      caption: "Chi. Shiva Kumar Yadav in royal wedding sherwani & sacred garland",
+      category: "Couple"
+    },
+    {
       src: "/assets/images/couple_portrait.jpg",
       title: "The Blessed Couple",
       caption: "Chi. Shiva Kumar Yadav & Chi.La.Sow. Lahari (Shireesha)",
@@ -440,6 +454,8 @@ export const weddingData: WeddingData = {
     vinayakaMandapamWebp: "/images/wedding/vinayaka-mandapam.webp",
     vinayakaMandapamJpg: "/assets/images/vinayaka_mandapam.jpg",
     couplePortrait: "/assets/images/couple_portrait.jpg",
+    bridePortrait: "/assets/images/bride_portrait.jpg",
+    groomPortrait: "/assets/images/groom_portrait.jpg",
     mandapamStage: "/assets/images/mandapam_stage.jpg",
     divineBlessings: "/assets/images/divine_blessings.jpg",
     originalWeddingCard: "/assets/images/original_wedding_card.jpg"

@@ -2064,14 +2064,18 @@ body {
 }
 
 .couple-avatar-frame {
-  width: 170px;
-  height: 170px;
-  margin: 0 auto 1.5rem;
+  width: 220px;
+  height: 220px;
+  max-width: 100%;
+  margin: 0 auto 1.6rem;
   border-radius: 50%;
-  padding: 6px;
-  background: var(--color-gold-gradient);
-  box-shadow: 0 0 30px rgba(223, 168, 74, 0.4);
+  padding: 4px;
+  background: radial-gradient(circle, #1A0407 0%, #000000 100%);
+  border: 2px solid rgba(223, 168, 74, 0.7);
+  box-shadow: 0 0 32px rgba(223, 168, 74, 0.35), 0 10px 30px rgba(0, 0, 0, 0.8);
   overflow: hidden;
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .couple-avatar-img {
@@ -2079,25 +2083,30 @@ body {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  object-position: center center;
+  transform: scale(1.0);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .couple-avatar-img.bride-avatar-img {
-  object-position: 36% 24%;
-  transform: scale(1.22);
+  object-position: center 48%;
+  transform: scale(1.0);
 }
 
 .couple-avatar-img.groom-avatar-img {
-  object-position: 63% 22%;
-  transform: scale(1.22);
+  object-position: center 48%;
+  transform: scale(1.0);
 }
 
-.couple-card:hover .couple-avatar-img.bride-avatar-img {
-  transform: scale(1.28);
+.couple-card:hover .couple-avatar-frame {
+  transform: translateY(-4px);
+  border-color: rgba(243, 210, 138, 0.95);
+  box-shadow: 0 0 42px rgba(223, 168, 74, 0.55), 0 14px 38px rgba(0, 0, 0, 0.9);
 }
 
+.couple-card:hover .couple-avatar-img.bride-avatar-img,
 .couple-card:hover .couple-avatar-img.groom-avatar-img {
-  transform: scale(1.28);
+  transform: scale(1.04);
 }
 
 .couple-role-badge {
@@ -4397,7 +4406,7 @@ body {
   /* Couple & Lineage */
   .couple-section { padding: 3.5rem 0; }
   .couple-card { padding: 2rem 1.2rem; border-radius: 20px; }
-  .couple-avatar-frame { width: 145px; height: 145px; margin-bottom: 1.2rem; }
+  .couple-avatar-frame { width: 190px; height: 190px; margin-bottom: 1.4rem; }
   .couple-name-full { font-size: 1.4rem; }
   .couple-role-tag { font-size: 0.82rem; }
   .couple-parents-detail { font-size: 0.9rem; line-height: 1.6; }
@@ -4521,7 +4530,7 @@ body {
   .timer-label { font-size: 0.65rem; }
 
   .couple-card { padding: 1.6rem 0.95rem; }
-  .couple-avatar-frame { width: 130px; height: 130px; }
+  .couple-avatar-frame { width: 165px; height: 165px; margin-bottom: 1.2rem; }
   .couple-quote { font-size: 0.82rem; padding: 0 0.2rem; }
 
   .timeline-container { padding-left: 32px; }

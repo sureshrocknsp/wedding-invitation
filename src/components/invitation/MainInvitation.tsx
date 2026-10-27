@@ -507,7 +507,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                     const current = e.currentTarget;
                     if (!current.dataset.fallbackTried) {
                       current.dataset.fallbackTried = 'true';
-                      current.src = data.assets?.couplePortrait || '/assets/images/couple_portrait.jpg';
+                      current.src = data.assets?.bridePortrait || '/assets/images/bride_portrait.jpg';
                     }
                   }}
                 />
@@ -537,7 +537,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                     const current = e.currentTarget;
                     if (!current.dataset.fallbackTried) {
                       current.dataset.fallbackTried = 'true';
-                      current.src = data.assets?.couplePortrait || '/assets/images/couple_portrait.jpg';
+                      current.src = data.assets?.groomPortrait || '/assets/images/groom_portrait.jpg';
                     }
                   }}
                 />

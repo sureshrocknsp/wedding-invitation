@@ -20,7 +20,7 @@ const WEDDING_DATA = {
       parents: "Smt. Devarakonda Anjamma & Sri Devarakonda Yadaiah Yadav",
       teluguParents: "శ్రీమతి దేవరకొండ అంజమ్మ - శ్రీ దేవరకొండ యాదయ్య యాదవ్",
       bio: "Two souls united by destiny, blessed by sacred Telugu traditions and eternal love.",
-      photo: "assets/images/couple_portrait.jpg"
+      photo: "assets/images/bride_portrait.jpg"
     },
     groom: {
       name: "Shiva Kumar Yadav",
@@ -34,7 +34,7 @@ const WEDDING_DATA = {
       residence: "Residents of Raghavapur",
       teluguResidence: "రాఘవాపూర్ వాసులు",
       bio: "Stepping into a sacred union guided by divine grace, mutual devotion, and loving family blessings.",
-      photo: "assets/images/couple_portrait.jpg"
+      photo: "assets/images/groom_portrait.jpg"
     },
     hashtag: "#ShivaWedsLahari"
   },

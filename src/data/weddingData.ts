@@ -374,13 +374,13 @@ export const weddingData: WeddingData = {
     {
       src: "/assets/images/bride_portrait.jpg",
       title: "చి॥ల॥సౌ॥ లహరి (శిరీష) — The Bride",
-      caption: "Chi.La.Sow. Lahari in sacred Kalyana Pattu & ornate traditional floral frame",
+      caption: "Chi.La.Sow. Lahari in sacred Kalyana Pattu & traditional wedding jewelry",
       category: "Couple"
     },
     {
       src: "/assets/images/groom_portrait.jpg",
       title: "చి॥ శివకుమార్ యాదవ్ — The Groom",
-      caption: "Chi. Shiva Kumar Yadav in royal wedding sherwani & sacred garland",
+      caption: "Chi. Shiva Kumar Yadav in traditional silk wedding attire & sacred tilak",
       category: "Couple"
     },
     {

@@ -2069,10 +2069,10 @@ body {
   max-width: 100%;
   margin: 0 auto 1.6rem;
   border-radius: 50%;
-  padding: 4px;
-  background: radial-gradient(circle, #1A0407 0%, #000000 100%);
-  border: 2px solid rgba(223, 168, 74, 0.7);
-  box-shadow: 0 0 32px rgba(223, 168, 74, 0.35), 0 10px 30px rgba(0, 0, 0, 0.8);
+  padding: 5px;
+  background: linear-gradient(135deg, #fceda2 0%, #dfa84a 50%, #8b6508 100%);
+  border: 2px solid rgba(243, 210, 138, 0.85);
+  box-shadow: 0 0 35px rgba(223, 168, 74, 0.4), 0 12px 32px rgba(0, 0, 0, 0.8);
   overflow: hidden;
   position: relative;
   transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
@@ -2089,19 +2089,19 @@ body {
 }
 
 .couple-avatar-img.bride-avatar-img {
-  object-position: center 48%;
+  object-position: center 10%;
   transform: scale(1.0);
 }
 
 .couple-avatar-img.groom-avatar-img {
-  object-position: center 48%;
+  object-position: center 15%;
   transform: scale(1.0);
 }
 
 .couple-card:hover .couple-avatar-frame {
   transform: translateY(-4px);
-  border-color: rgba(243, 210, 138, 0.95);
-  box-shadow: 0 0 42px rgba(223, 168, 74, 0.55), 0 14px 38px rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 235, 175, 1);
+  box-shadow: 0 0 45px rgba(223, 168, 74, 0.65), 0 14px 38px rgba(0, 0, 0, 0.9);
 }
 
 .couple-card:hover .couple-avatar-img.bride-avatar-img,

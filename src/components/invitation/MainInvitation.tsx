@@ -1107,7 +1107,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             onClick={handleShareInvitation}
             className="secondary-btn footer-share-btn"
             type="button"
-            style={{ fontSize: '0.8rem', padding: '0.55rem 1.4rem', minHeight: 'auto' }}
             title="Share Wedding Invitation"
           >
             <span>💌 Share Invitation</span>
@@ -1116,7 +1115,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             onClick={onReplayEntry}
             className="secondary-btn footer-replay-btn"
             type="button"
-            style={{ fontSize: '0.8rem', padding: '0.55rem 1.4rem', minHeight: 'auto' }}
             title="Replay Grand Entrance"
           >
             <span>🎬 Replay Grand Entrance</span>

@@ -73,6 +73,7 @@ html {
   scroll-padding-top: 24px;
   -webkit-text-size-adjust: 100%;
   overflow-x: hidden;
+  width: 100%;
   max-width: 100%;
 }
 
@@ -82,6 +83,7 @@ body {
   color: var(--color-sand-ivory);
   line-height: 1.75;
   overflow-x: hidden;
+  width: 100%;
   max-width: 100%;
   position: relative;
   background-image: 
@@ -89,6 +91,8 @@ body {
     radial-gradient(circle at 100% 50%, rgba(201, 164, 92, 0.06) 0%, transparent 50%),
     radial-gradient(circle at 0% 80%, rgba(59, 11, 20, 0.35) 0%, transparent 60%);
   background-attachment: fixed;
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
 }
 
 #root,
@@ -3785,8 +3789,15 @@ body {
 .highlight-sub,
 .panchangam-samvatsara-tag,
 .card-top-blessing-trio,
-.telugu-sub-names {
-  font-family: var(--font-telugu);
+.telugu-sub-names,
+.ceremony-hero-title,
+.hero-invitation-telugu,
+.names-invitation-telugu,
+.spotlight-telugu-name,
+.telugu-single-name {
+  font-family: var(--font-telugu), var(--font-sanskrit), serif;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 /* 3.5 Family & Well Wishers Section */
@@ -4477,6 +4488,8 @@ body {
   .nav-links-desktop { display: none !important; }
   .mobile-menu-btn { display: inline-flex !important; }
   .couple-grid, .rsvp-layout-grid, .venue-card-wrapper, .invites-and-wishers-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .couple-spotlight-card { grid-template-columns: 260px 1fr; gap: 2rem; padding: 2.2rem 2rem; }
+  .spotlight-photo-frame { max-width: 240px; }
   .pillars-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
   .card-replica-footer-row { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
   .rituals-grid, .gallery-grid { grid-template-columns: repeat(2, 1fr); }
@@ -4484,15 +4497,43 @@ body {
   .lightbox-next { right: 10px; }
 }
 
+@media (max-width: 860px) {
+  .timeline-container::before { left: 16px; }
+  .timeline-item {
+    width: 100% !important;
+    padding-left: 42px !important;
+    padding-right: 0 !important;
+    left: 0 !important;
+    text-align: left !important;
+    margin-bottom: 1.5rem;
+  }
+  .timeline-item.right { left: 0 !important; }
+  .timeline-item.left .timeline-node-pin, .timeline-item.right .timeline-node-pin {
+    left: 8px !important;
+    right: auto !important;
+    width: 16px;
+    height: 16px;
+    top: 24px;
+  }
+  .hero-event-highlight {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+    padding: 1.1rem 1rem;
+    text-align: left;
+  }
+}
+
 @media (max-width: 767px) {
   html, body, #root, .wedding-app-root, .main-invitation-wrapper {
-    max-width: 100vw;
+    width: 100%;
+    max-width: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
   }
   .section-container {
     padding: 0 1rem;
-    max-width: 100vw;
+    width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
   }
@@ -4527,8 +4568,10 @@ body {
     padding: 1.35rem 1.1rem 1.1rem;
     bottom: 2%;
     border-radius: 20px;
-    max-height: 58vh;
+    max-height: 84vh;
+    max-height: 84svh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .couple-names-block { gap: 0.35rem; margin: 0.35rem 0 0.5rem; }
   .bride-headline, .groom-headline { font-size: clamp(1.15rem, 5vw, 1.45rem); letter-spacing: 0.8px; }
@@ -4595,6 +4638,37 @@ body {
 
   /* Couple & Lineage */
   .couple-section { padding: 3.5rem 0; }
+  .couple-spotlight-card {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+    padding: 1.8rem 1.2rem;
+    text-align: center;
+    border-radius: 22px;
+  }
+  .spotlight-frame-wrapper {
+    width: 100%;
+    justify-content: center;
+  }
+  .spotlight-photo-frame {
+    max-width: 240px;
+    margin: 0 auto;
+  }
+  .spotlight-info {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .spotlight-desc {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--color-gold-antique);
+    padding-top: 0.8rem;
+  }
+  .spotlight-meta-tags {
+    justify-content: center;
+  }
   .couple-card { padding: 2rem 1.2rem; border-radius: 20px; }
   .couple-avatar-frame { width: 190px; height: 190px; margin-bottom: 1.4rem; }
   .couple-name-full { font-size: 1.4rem; }
@@ -4645,6 +4719,26 @@ body {
   .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
   .gallery-item { height: 200px; border-radius: 12px; }
 
+  /* Lightbox Modal on mobile */
+  .lightbox-close-btn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 350;
+    width: 44px;
+    height: 44px;
+    background: rgba(20, 8, 10, 0.88);
+    border: 1px solid var(--color-gold-base);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--color-sand-ivory);
+    cursor: pointer;
+  }
+
   /* RSVP & Blessings */
   .rsvp-section { padding: 3.5rem 0; }
   .rsvp-form-box, .blessings-wall-box { padding: 1.8rem 1.2rem; border-radius: 20px; }
@@ -4658,6 +4752,35 @@ body {
   .attendance-pill-btn { width: 100%; min-height: 48px; }
   .radio-attendance-group { flex-direction: column; gap: 0.65rem; }
   .radio-attendance-btn { width: 100%; padding: 0.75rem; font-size: 0.88rem; }
+
+  /* Closing Mangalam */
+  .mangalam-card {
+    padding: 2.2rem 1.3rem;
+    border-radius: 22px;
+  }
+  .mangalam-blessings-cta {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.95rem 1.2rem;
+    font-size: 0.88rem;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* Footer on mobile */
+  .footer-actions-row {
+    flex-direction: column;
+    width: 100%;
+    max-width: 380px;
+    margin: 1.2rem auto 0;
+    gap: 0.75rem;
+  }
+  .footer-share-btn, .footer-replay-btn {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
 
   /* Quick Nav Trigger on mobile */
   .quick-nav-drawer-trigger {
@@ -4689,11 +4812,28 @@ body {
   .kalyanam-brand { font-size: 0.85rem; max-width: 42%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .back-to-invite-btn { padding: 0.42rem 0.8rem; font-size: 0.8rem; }
   .kalyanam-nav-action-btn { padding: 0.42rem 0.8rem; font-size: 0.8rem; }
-  .kalyanam-page-container { padding: 1.2rem 0.85rem 3.5rem; max-width: 100vw; box-sizing: border-box; overflow-x: hidden; }
+  .kalyanam-page-container { padding: 1.2rem 0.85rem 3.5rem; max-width: 100%; box-sizing: border-box; overflow-x: hidden; }
   .kalyanam-page-title { font-size: clamp(1.35rem, 5.5vw, 1.8rem); line-height: 1.35; }
   .vow-step-card { padding: 1.1rem 0.95rem; gap: 0.85rem; }
   .kalyanam-page-footer-cta { flex-direction: column; padding: 1.5rem 1rem; gap: 0.9rem; }
   .return-invite-btn, .gold-glow-btn { width: 100%; justify-content: center; text-align: center; }
+}
+
+@media (max-width: 580px) {
+  .pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .pillar-item {
+    padding: 1.4rem 1.1rem;
+  }
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+  .gallery-item {
+    height: 230px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -4719,6 +4859,8 @@ body {
   .timer-digit { font-size: 1.65rem; }
   .timer-label { font-size: 0.65rem; }
 
+  .couple-spotlight-card { padding: 1.5rem 0.95rem; }
+  .spotlight-photo-frame { max-width: 210px; }
   .couple-card { padding: 1.6rem 0.95rem; }
   .couple-avatar-frame { width: 165px; height: 165px; margin-bottom: 1.2rem; }
   .couple-quote { font-size: 0.82rem; padding: 0 0.2rem; }
@@ -4738,6 +4880,8 @@ body {
   .gallery-grid { grid-template-columns: 1fr; gap: 0.85rem; }
   .gallery-item { height: 220px; }
 
+  .mangalam-card { padding: 1.8rem 0.95rem; border-radius: 18px; }
+
   .kalyanam-brand { display: none; }
   .kalyanam-page-nav { justify-content: space-between; }
   .back-to-invite-btn { font-size: 0.78rem; padding: 0.4rem 0.7rem; }
@@ -4746,13 +4890,43 @@ body {
 
 @media (max-width: 360px) {
   .hero-content-card { padding: 1.4rem 0.65rem; }
-  .couple-name-script { font-size: 1.85rem; }
-  .timer-digit { font-size: 1.35rem; }
-  .timer-label { font-size: 0.6rem; }
-  .couple-avatar-frame { width: 110px; height: 110px; }
+  .floral-corner { width: 32px; height: 32px; }
+  .floral-corner svg { width: 32px; height: 32px; }
+  .couple-name-script { font-size: clamp(1.5rem, 6.8vw, 2.1rem); }
+  .timer-digit { font-size: 1.45rem; }
+  .timer-label { font-size: 0.65rem; }
+  .timer-unit { padding: 0.75rem 0.25rem; }
+  .couple-avatar-frame { width: 145px; height: 145px; }
+  .couple-spotlight-card { padding: 1.4rem 0.8rem; }
+  .spotlight-photo-frame { max-width: 195px; }
+  .couple-card, .invites-by-card, .well-wishers-card, .venue-card-wrapper, .rsvp-form-box, .blessings-wall-box { padding: 1.5rem 0.85rem; border-radius: 18px; }
+  .mangalam-card { padding: 1.5rem 0.75rem; border-radius: 16px; }
   .couple-names-sanctum-card { padding: 1.1rem 0.8rem; }
   .tap-badge-text { font-size: 0.82rem; letter-spacing: 2px; }
   .tap-badge-sub { font-size: 0.7rem; }
+}
+
+@media (max-width: 330px) {
+  .section-container { padding: 0 0.65rem; }
+  .hero-content-card { padding: 1.3rem 0.65rem 1.15rem; border-radius: 16px; }
+  .floral-corner { width: 24px; height: 24px; }
+  .floral-corner svg { width: 24px; height: 24px; }
+  .couple-name-script { font-size: 1.45rem; }
+  .couple-avatar-frame { width: 135px; height: 135px; }
+  .couple-card, .couple-spotlight-card { padding: 1.3rem 0.65rem; border-radius: 16px; }
+  .spotlight-photo-frame { max-width: 175px; }
+  .vow-step-card { padding: 0.95rem 0.65rem; gap: 0.6rem; }
+  .step-number-bubble { width: 34px; height: 34px; font-size: 0.95rem; }
+  .highlight-item { gap: 0.65rem; font-size: 0.82rem; }
+  .highlight-icon-box { width: 32px; height: 32px; }
+  .highlight-icon-box svg { width: 16px; height: 16px; }
+  .timer-unit { padding: 0.65rem 0.2rem; }
+  .timer-digit { font-size: 1.3rem; }
+  .timer-label { font-size: 0.6rem; }
+  .astrology-box-enhanced { padding: 0.9rem 0.65rem; }
+  .timeline-box { padding: 1rem 0.75rem; }
+  .rsvp-form-box, .blessings-wall-box { padding: 1.35rem 0.65rem; }
+  .mangalam-card { padding: 1.35rem 0.65rem; }
 }
 
 /* ==========================================================================

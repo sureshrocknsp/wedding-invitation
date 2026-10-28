@@ -89,6 +89,7 @@ export interface WeddingData {
     description: string;
     icon: string;
     isPrimary?: boolean;
+    image?: string;
   }>;
   rituals: Array<{
     id: string;
@@ -268,7 +269,8 @@ export const weddingData: WeddingData = {
       time: "07:30 AM onwards",
       venue: "Family Residence",
       description: "Purification rites, fragrant turmeric paste blessings, and traditional songs to prepare the bride & groom for the sacred union.",
-      icon: "🌼"
+      icon: "🌼",
+      image: "/assets/images/ritual_haldi.jpg"
     },
     {
       id: "event-edurukollu",
@@ -289,7 +291,8 @@ export const weddingData: WeddingData = {
       venue: "Brundavan Gardens Kalyana Vedika",
       description: "The divine tying of the sacred Mangalasutra, Jeelakarra-Bellam, and holy Talambralu amidst Vedic chants and shower of Akshatalu.",
       icon: "✨",
-      isPrimary: true
+      isPrimary: true,
+      image: "/assets/images/ritual_muhurtham.jpg"
     },
     {
       id: "event-bhojanam",
@@ -309,10 +312,19 @@ export const weddingData: WeddingData = {
       time: "06:30 PM onwards",
       venue: "Brundavan Gardens Stage & Lawns",
       description: "An evening of celebration, congratulations, music, and congratulations with friends and relatives.",
-      icon: "👑"
+      icon: "👑",
+      image: "/assets/images/ritual_reception.jpg"
     }
   ],
   rituals: [
+    {
+      id: "haldi-nalangu",
+      name: "Mangala Snanam & Pasupu Ceremony",
+      sanskritName: "పసుపు వేడుక & మంగళ స్నానం",
+      time: "Morning 07:30 AM",
+      image: "/assets/images/ritual_haldi.jpg",
+      description: "Beloved family members apply auspicious golden turmeric paste and aromatic oils, showering good health and joyful blessings for the holy marriage."
+    },
     {
       id: "mangalyadharanam",
       name: "Jeelakarra Bellam & Mangalyadharanam",
@@ -326,8 +338,16 @@ export const weddingData: WeddingData = {
       name: "Talambralu (Sacred Akshata Shower)",
       sanskritName: "తలంబ్రాలు సంబరం",
       time: "12:15 PM onwards",
-      image: "/assets/images/mandapam_stage.jpg",
+      image: "/assets/images/ritual_muhurtham.jpg",
       description: "A joyful ritual where Lahari and Shiva Kumar shower each other with sanctified pearls and turmeric rice, symbolizing an overflowing life of prosperity, joy, and mutual affection."
+    },
+    {
+      id: "reception-gala",
+      name: "Blessings & Felicitation Reception",
+      sanskritName: "శుభాశీర్వాదములు & అభినందన సభ (Grand Evening Felicitation)",
+      time: "Evening 06:30 PM onwards",
+      image: "/assets/images/ritual_reception.jpg",
+      description: "A glamorous evening celebration where Chi. Shiva Kumar Yadav & Chi.La.Sow. Lahari receive heartfelt blessings, felicitation, and dinner hospitality amidst sparkling chandeliers and joyful celebrations."
     },
     {
       id: "saptapadi",
@@ -336,14 +356,6 @@ export const weddingData: WeddingData = {
       time: "12:30 PM onwards",
       image: "/assets/images/mandapam_stage.jpg",
       description: "The newlyweds take seven holy steps around the sacred Agni fire, solemnizing their vows of nourishment, strength, dharma, prosperity, harmony, friendship, and lifelong devotion."
-    },
-    {
-      id: "haldi-nalangu",
-      name: "Mangala Snanam & Pasupu Ceremony",
-      sanskritName: "పసుపు వేడుక & మంగళ స్నానం",
-      time: "Morning 07:30 AM",
-      image: "/assets/images/ritual_haldi.jpg",
-      description: "Beloved family members apply auspicious golden turmeric paste and aromatic oils, showering good health and joyful blessings for the holy marriage."
     }
   ],
   gallery: [

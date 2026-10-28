@@ -190,6 +190,7 @@ export const WeddingEntrance: React.FC<WeddingEntranceProps> = ({
         weddingDateFormatted={data.weddingDateFormatted}
         muhurthamTime={data.muhurthamTime}
         venueName={data.venue.name}
+        couplePhoto={data.assets?.couplePortrait || '/assets/images/couple_portrait.jpg'}
         onProceed={handleProceedToInvitation}
         autoProceedSeconds={5}
       />

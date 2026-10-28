@@ -495,6 +495,46 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
             </div>
           </div>
 
+          {/* Centerpiece Blessed Couple Feature Showcase */}
+          <div className="couple-spotlight-card">
+            <div className="spotlight-frame-wrapper">
+              <div className="spotlight-photo-frame">
+                <img
+                  src={data.assets?.couplePortrait || "/assets/images/couple_portrait.jpg"}
+                  alt={`${data.couple.bride.name} & ${data.couple.groom.name} - The Blessed Couple`}
+                  className="spotlight-couple-img"
+                  loading="lazy"
+                  onError={(e) => {
+                    const current = e.currentTarget;
+                    if (!current.dataset.fallbackTried) {
+                      current.dataset.fallbackTried = 'true';
+                      current.src = '/assets/images/mandapam_stage.jpg';
+                    }
+                  }}
+                />
+                <div className="spotlight-badge-overlay">
+                  <span className="spotlight-hashtag">{data.couple.hashtag || "#ShivaWedsLahari"}</span>
+                </div>
+              </div>
+            </div>
+            <div className="spotlight-info">
+              <span className="card-badge-gold">దివ్య దంపతులు • The Blessed Couple</span>
+              <h3 className="spotlight-title gold-shimmer-text">
+                {data.couple.bride.name} & {data.couple.groom.name}
+              </h3>
+              <div className="spotlight-telugu-name">
+                {data.couple.bride.teluguName} పరిణయం {data.couple.groom.teluguName}
+              </div>
+              <p className="spotlight-desc">
+                "Two souls united by destiny, blessed by sacred Telugu traditions, and walking hand-in-hand towards an eternal journey of love, harmony, and togetherness."
+              </p>
+              <div className="spotlight-meta-tags">
+                <span className="spotlight-tag">🪔 Sumuhurtham: {data.muhurthamTime} ({data.astrology.lagnam})</span>
+                <span className="spotlight-tag">🏛️ {data.venue.name}, {data.venue.city}</span>
+              </div>
+            </div>
+          </div>
+
           <div className="couple-grid">
             {/* Bride Card */}
             <div className="couple-card">
@@ -722,6 +762,22 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               >
                 <div className="timeline-node-pin"></div>
                 <div className={`timeline-box ${e.isPrimary ? 'muhurtham-timeline-box' : ''}`}>
+                  {e.image && (
+                    <div className="timeline-event-image-box">
+                      <img
+                        src={e.image}
+                        alt={e.name}
+                        className="timeline-event-img"
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLElement;
+                          if (target && target.parentElement) {
+                            target.parentElement.style.display = 'none';
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
                   <span className="timeline-date-tag">{e.dayTag}</span>
                   <h3 className={`timeline-title ${e.isPrimary ? 'gold-shimmer-text' : ''}`}>
                     {e.name}

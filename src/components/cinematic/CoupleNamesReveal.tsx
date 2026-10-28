@@ -13,6 +13,7 @@ interface CoupleNamesRevealProps {
   weddingDateFormatted: string;
   muhurthamTime: string;
   venueName: string;
+  couplePhoto?: string;
   onProceed: () => void;
   autoProceedSeconds?: number;
 }
@@ -28,6 +29,7 @@ export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
   weddingDateFormatted,
   muhurthamTime,
   venueName,
+  couplePhoto,
   onProceed,
   autoProceedSeconds = 5
 }) => {
@@ -77,6 +79,19 @@ export const CoupleNamesReveal: React.FC<CoupleNamesRevealProps> = ({
         <p className="names-tagline">శ్రీరస్తు • శుభమస్తు • కళ్యాణమస్తు</p>
         <p className="together-families-label">Together with their families</p>
       </div>
+
+      {/* 1.5 Couple Portrait Medallion */}
+      {couplePhoto && (
+        <div className="reveal-couple-avatar-wrap">
+          <div className="reveal-couple-avatar-frame">
+            <img
+              src={couplePhoto}
+              alt={`${brideFullName} & ${groomFullName}`}
+              className="reveal-couple-avatar-img"
+            />
+          </div>
+        </div>
+      )}
 
       {/* 2. Couple Names: Bride & Groom in exact requested order */}
       <div className="couple-names-block">

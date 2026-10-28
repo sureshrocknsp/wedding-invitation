@@ -130,10 +130,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     setRsvpErrorMsg(null);
     setIsSubmittingRsvp(true);
 
-    const isAttending = rsvpAttendance === 'attending';
-    const noteText = rsvpMessage.trim() || (isAttending 
-      ? `Joyfully celebrating with ${data.couple.groom.name} & ${data.couple.bride.name}! (${rsvpCount} attending)` 
-      : 'Sending our heartfelt blessings & warmest wishes to the couple!');
+    const noteText = rsvpMessage.trim() || `Joyfully celebrating with ${data.couple.groom.name} & ${data.couple.bride.name}! (${rsvpCount} attending)`;
 
     const newBlessing = {
       name: rsvpName.trim(),
@@ -985,7 +982,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                   <div className="success-icon">✨ 💌 🪔</div>
                   <h4 className="success-title gold-text">RSVP Received with Joy!</h4>
                   <p className="success-msg">
-                    Thank you, <strong>{rsvpName}</strong>. Your response ({rsvpAttendance === 'attending' ? `Attending with ${rsvpCount}` : 'Warmly wishing from afar'}) and heartfelt blessings have been added to our celebration wall.
+                    Thank you, <strong>{rsvpName}</strong>. Your response ({`Attending with ${rsvpCount}`}) and heartfelt blessings have been added to our celebration wall.
                   </p>
                   {data.rsvp.confirmationNote && (
                     <p className="confirmation-note" style={{ color: '#c9a45c', fontSize: '0.9rem', marginTop: '0.75rem', fontStyle: 'italic' }}>
@@ -1027,40 +1024,15 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Will you be attending? <span className="req-star">*</span></label>
-                    <div className="attendance-choice-group" role="radiogroup" aria-label="Attendance choices">
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={rsvpAttendance === 'attending'}
-                        className={`attendance-pill-btn ${rsvpAttendance === 'attending' ? 'active' : ''}`}
-                        onClick={() => setRsvpAttendance('attending')}
-                      >
-                        <span>🌸 Joyfully Accept</span>
-                      </button>
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={rsvpAttendance === 'declined'}
-                        className={`attendance-pill-btn ${rsvpAttendance === 'declined' ? 'active' : ''}`}
-                        onClick={() => setRsvpAttendance('declined')}
-                      >
-                        <span>🕊️ Regretfully Decline</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {rsvpAttendance === 'attending' && (
-                    <div className="form-group">
-                      <label htmlFor="rsvpGuestsCount" className="form-label">
-                        Number of Guests Attending
-                      </label>
-                      <select
-                        id="rsvpGuestsCount"
-                        className="form-select"
-                        value={rsvpCount}
-                        onChange={(e) => setRsvpCount(e.target.value)}
-                      >
+                    <label htmlFor="rsvpGuestsCount" className="form-label">
+                      Number of Guests Attending
+                    </label>
+                    <select
+                      id="rsvpGuestsCount"
+                      className="form-select"
+                      value={rsvpCount}
+                      onChange={(e) => setRsvpCount(e.target.value)}
+                    >
                         {(data.rsvp.guestCountOptions && data.rsvp.guestCountOptions.length > 0
                           ? data.rsvp.guestCountOptions
                           : ['1 Person', '2 Persons', '3 Persons', '4 Persons', '5+ Persons (Family)']
@@ -1071,7 +1043,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                         ))}
                       </select>
                     </div>
-                  )}
 
                   <div className="form-group">
                     <label htmlFor="rsvpMessage" className="form-label">

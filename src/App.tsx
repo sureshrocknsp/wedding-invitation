@@ -7,18 +7,26 @@ import { AudioToggle } from './components/ui/AudioToggle';
 import { useAudioEngine } from './hooks/useAudioEngine';
 import './styles/wedding.css';
 
+const isKalyanamRoute = () => {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.location.hash.toLowerCase().includes('kalyanam') ||
+    window.location.pathname.toLowerCase().includes('kalyanam')
+  );
+};
+
 export const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'kalyanam'>(() => {
-    return window.location.hash.includes('kalyanam') ? 'kalyanam' : 'home';
+    return isKalyanamRoute() ? 'kalyanam' : 'home';
   });
   const [isEntranceDismissed, setIsEntranceDismissed] = useState(false);
 
   const { isPlaying, playTempleBell, startMusic, toggleMusic } = useAudioEngine();
 
-  // Handle browser back/forward buttons
+  // Handle browser back/forward buttons and hash/path changes
   useEffect(() => {
-    const handleHashChange = () => {
-      if (window.location.hash.includes('kalyanam')) {
+    const handleRouteChange = () => {
+      if (isKalyanamRoute()) {
         setCurrentPage('kalyanam');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
@@ -26,8 +34,12 @@ export const App: React.FC = () => {
       }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', handleRouteChange);
+    window.addEventListener('popstate', handleRouteChange);
+    return () => {
+      window.removeEventListener('hashchange', handleRouteChange);
+      window.removeEventListener('popstate', handleRouteChange);
+    };
   }, []);
 
   const navigateTo = useCallback((page: 'home' | 'kalyanam') => {

@@ -149,6 +149,8 @@ export interface WeddingData {
     initialVolume: number;
     raga: string;
     tonic: string;
+    title?: string;
+    trackUrl?: string;
   };
 }
 
@@ -493,6 +495,8 @@ export const weddingData: WeddingData = {
     autoPlayPrompt: true,
     initialVolume: 0.85,
     raga: "Gambheera Nattai / Kalyani",
-    tonic: "D (Panchama Shruti)"
+    tonic: "D (Panchama Shruti)",
+    title: "Alanati Ramachandrudu (Murari)",
+    trackUrl: "/assets/audio/alanati_ramachandrudu.mp3"
   }
 };

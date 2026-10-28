@@ -262,34 +262,39 @@ export function useAudioEngine() {
       // Check if an audio file exists in public/assets/audio/
       if (!audioElementRef.current) {
         const audio = new Audio();
-        audio.src = '/assets/audio/wedding_nadaswaram.mp3';
+        audio.src = '/assets/audio/alanati_ramachandrudu.mp3';
         audio.loop = true;
         audio.volume = 0.85;
 
-        audio.addEventListener('canplaythrough', () => {
-          isAudioFilePlayingRef.current = true;
-          audio.play().catch(() => {
-            // If browser prevents file autoplay or file is absent, fallback to procedural synthesis
-            isAudioFilePlayingRef.current = false;
-          });
-        });
-
-        audio.addEventListener('error', () => {
-          // File not found or unplayable: rely seamlessly on authentic synthesis
-          isAudioFilePlayingRef.current = false;
-        });
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              isAudioFilePlayingRef.current = true;
+            })
+            .catch(() => {
+              // If file is blocked or fails, try fallback or procedural synthesis
+              audio.src = '/assets/audio/wedding_nadaswaram.mp3';
+              audio.play()
+                .then(() => {
+                  isAudioFilePlayingRef.current = true;
+                })
+                .catch(() => {
+                  isAudioFilePlayingRef.current = false;
+                  startTanpuraDrone(ctx, master);
+                  startNadaswaramMelody(ctx, master);
+                  startThavilRhythm(ctx, master);
+                });
+            });
+        }
 
         audioElementRef.current = audio;
-      }
-
-      // Try playing the audio element
-      if (audioElementRef.current && isAudioFilePlayingRef.current) {
-        audioElementRef.current.play().catch(() => {});
       } else {
-        // Start procedural authentic Carnatic Nadaswaram & Mangala Vaathiyam
-        startTanpuraDrone(ctx, master);
-        startNadaswaramMelody(ctx, master);
-        startThavilRhythm(ctx, master);
+        audioElementRef.current.play().catch(() => {
+          startTanpuraDrone(ctx, master);
+          startNadaswaramMelody(ctx, master);
+          startThavilRhythm(ctx, master);
+        });
       }
 
       setIsPlaying(true);

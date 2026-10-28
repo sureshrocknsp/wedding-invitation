@@ -32,6 +32,7 @@ Thumbs.db
 .idea/
 
 qa-screenshots/
+.netlify/
 *.suo
 *.ntvs*
 *.njsproj
@@ -41,3 +42,5 @@ qa-screenshots/
 # Temporary / Cache
 .eslintcache
 .cache/
+
+.vercel

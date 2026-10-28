@@ -338,8 +338,8 @@ export const weddingData: WeddingData = {
       name: "Talambralu (Sacred Akshata Shower)",
       sanskritName: "తలంబ్రాలు సంబరం",
       time: "12:15 PM onwards",
-      image: "/assets/images/ritual_muhurtham.jpg",
-      description: "A joyful ritual where Lahari and Shiva Kumar shower each other with sanctified pearls and turmeric rice, symbolizing an overflowing life of prosperity, joy, and mutual affection."
+      image: "/assets/images/ritual_talambralu.jpg",
+      description: "A joyful ritual where Lahari and Shiva Kumar shower each other with sanctified pearls, turmeric rice, and yellow flower petals, symbolizing an overflowing life of prosperity, joy, and mutual affection."
     },
     {
       id: "reception-gala",
@@ -403,8 +403,14 @@ export const weddingData: WeddingData = {
     },
     {
       src: "/assets/images/ritual_muhurtham.jpg",
-      title: "Sacred Sumuhurtham",
-      caption: "Divine Mangalyadharanam at 11:47 AM",
+      title: "Sacred Sumuhurtham (మాంగళ్యధారణం)",
+      caption: "Holy Mangalyadharanam before the sacred Agni at 11:47 AM",
+      category: "Ritual"
+    },
+    {
+      src: "/assets/images/ritual_talambralu.jpg",
+      title: "Joyful Varmala & Talambralu (తలంబ్రాలు సంబరం)",
+      caption: "Elders and family showering Akshatas and fragrant yellow petals",
       category: "Ritual"
     },
     {

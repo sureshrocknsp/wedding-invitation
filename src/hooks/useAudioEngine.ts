@@ -273,18 +273,11 @@ export function useAudioEngine() {
               isAudioFilePlayingRef.current = true;
             })
             .catch(() => {
-              // If file is blocked or fails, try fallback or procedural synthesis
-              audio.src = '/assets/audio/wedding_nadaswaram.mp3';
-              audio.play()
-                .then(() => {
-                  isAudioFilePlayingRef.current = true;
-                })
-                .catch(() => {
-                  isAudioFilePlayingRef.current = false;
-                  startTanpuraDrone(ctx, master);
-                  startNadaswaramMelody(ctx, master);
-                  startThavilRhythm(ctx, master);
-                });
+              // If audio file playback is blocked or fails, fall back to procedural Indian Classical synthesis
+              isAudioFilePlayingRef.current = false;
+              startTanpuraDrone(ctx, master);
+              startNadaswaramMelody(ctx, master);
+              startThavilRhythm(ctx, master);
             });
         }
 

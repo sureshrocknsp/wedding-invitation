@@ -34,8 +34,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   const [blessings, setBlessings] = useState(data.rsvp.initialBlessings);
 
 
-  // Share feedback toast state
-  const [shareToast, setShareToast] = useState<string | null>(null);
 
   // RSVP submission loading & error state
   const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
@@ -1187,12 +1185,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
         data={data}
       />
 
-      {/* TASTEFUL LINK COPIED TOAST BANNER */}
-      {shareToast && (
-        <div className="share-toast-banner" role="status" aria-live="polite">
-          <span>{shareToast}</span>
-        </div>
-      )}
     </div>
   );
 };

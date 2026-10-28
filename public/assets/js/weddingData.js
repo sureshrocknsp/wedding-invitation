@@ -118,13 +118,14 @@ const WEDDING_DATA = {
   events: [
     {
       id: "event-haldi",
-      dayTag: "Sunday Morning — 07:30 AM",
+      dayTag: "Saturday Morning — 07:30 AM",
       name: "Mangala Snanam & Haldi Ceremony",
-      teluguName: "మంగళ స్నానం & పసుపు వేడుక",
+      teluguName: "మంగళ స్నానం & పసుపు వేడుక (శనివారం ఉదయం)",
       time: "07:30 AM onwards",
       venue: "Family Residence",
       description: "Purification rites, fragrant turmeric paste blessings, and traditional songs to prepare the bride & groom for the sacred union.",
-      icon: "🌼"
+      icon: "🌼",
+      image: "assets/images/ritual_haldi.jpg"
     },
     {
       id: "event-edurukollu",
@@ -145,7 +146,8 @@ const WEDDING_DATA = {
       venue: "Brundavan Gardens Kalyana Vedika",
       description: "The divine tying of the sacred Mangalasutra, Jeelakarra-Bellam, and holy Talambralu amidst Vedic chants and shower of Akshatalu.",
       icon: "✨",
-      isPrimary: true
+      isPrimary: true,
+      image: "assets/images/ritual_muhurtham.jpg"
     },
     {
       id: "event-bhojanam",
@@ -165,7 +167,8 @@ const WEDDING_DATA = {
       time: "06:30 PM onwards",
       venue: "Brundavan Gardens Stage & Lawns",
       description: "An evening of celebration, congratulations, music, and congratulations with friends and relatives.",
-      icon: "👑"
+      icon: "👑",
+      image: "assets/images/ritual_reception.jpg"
     }
   ],
 
@@ -197,8 +200,8 @@ const WEDDING_DATA = {
     {
       id: "haldi-nalangu",
       name: "Mangala Snanam & Pasupu Ceremony",
-      sanskritName: "పసుపు వేడుక & మంగళ స్నానం",
-      time: "Morning 07:30 AM",
+      sanskritName: "పసుపు వేడుక & మంగళ స్నానం (శనివారం)",
+      time: "Saturday Morning — 07:30 AM",
       image: "assets/images/ritual_haldi.jpg",
       description: "Beloved family members apply auspicious golden turmeric paste and aromatic oils, showering good health and joyful blessings for the holy marriage."
     }

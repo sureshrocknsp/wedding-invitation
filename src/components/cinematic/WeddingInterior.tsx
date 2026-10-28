@@ -37,7 +37,6 @@ export const WeddingInterior: React.FC<WeddingInteriorProps> = ({ state, assets 
             className="mandapam-photo-img"
             loading="eager"
             decoding="sync"
-            fetchPriority="high"
             onError={(e) => {
               const current = e.currentTarget;
               if (!current.dataset.fallbackTried) {

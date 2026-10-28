@@ -64,7 +64,6 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter,
                   className="door-leaf-img"
                   loading="eager"
                   decoding="sync"
-                  fetchPriority="high"
                   draggable={false}
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
@@ -82,7 +81,6 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter,
                   className="door-leaf-img"
                   loading="eager"
                   decoding="sync"
-                  fetchPriority="high"
                   draggable={false}
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
@@ -109,7 +107,6 @@ export const WeddingDoors: React.FC<WeddingDoorsProps> = ({ state, onTapToEnter,
             className="portal-proscenium-frame-img"
             loading="eager"
             decoding="sync"
-            fetchPriority="high"
             draggable={false}
             onError={(e) => {
               const current = e.currentTarget;

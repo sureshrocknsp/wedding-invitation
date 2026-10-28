@@ -30,6 +30,8 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+qa-screenshots/
 *.suo
 *.ntvs*
 *.njsproj

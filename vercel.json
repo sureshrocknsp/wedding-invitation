@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/kalyanam",
+      "destination": "/kalyanam/index.html"
+    },
+    {
+      "source": "/kalyanam/:match*",
+      "destination": "/kalyanam/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }

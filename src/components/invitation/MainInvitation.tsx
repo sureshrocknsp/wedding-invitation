@@ -28,16 +28,11 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
   // RSVP state
   const [rsvpName, setRsvpName] = useState('');
   const [rsvpAttendance, setRsvpAttendance] = useState<'attending' | 'declined'>('attending');
-  const [rsvpCount, setRsvpCount] = useState<string>(
-    data.rsvp.guestCountOptions?.[1] || '2 Persons'
-  );
   const [rsvpMessage, setRsvpMessage] = useState('');
   const [rsvpNameError, setRsvpNameError] = useState(false);
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
   const [blessings, setBlessings] = useState(data.rsvp.initialBlessings);
 
-  // Off-canvas quick navigation drawer state
-  const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
 
   // Share feedback toast state
   const [shareToast, setShareToast] = useState<string | null>(null);
@@ -130,7 +125,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     setRsvpErrorMsg(null);
     setIsSubmittingRsvp(true);
 
-    const noteText = rsvpMessage.trim() || `Joyfully celebrating with ${data.couple.groom.name} & ${data.couple.bride.name}! (${rsvpCount} attending)`;
+    const noteText = rsvpMessage.trim() || `Joyfully celebrating with ${data.couple.groom.name} & ${data.couple.bride.name}!`;
 
     const newBlessing = {
       name: rsvpName.trim(),
@@ -148,7 +143,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
           body: JSON.stringify({
             name: rsvpName.trim(),
             attendance: rsvpAttendance,
-            guestCount: rsvpAttendance === 'attending' ? rsvpCount : '0',
             message: rsvpMessage.trim(),
             submittedAt: new Date().toISOString()
           })
@@ -176,7 +170,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     setRsvpName('');
     setRsvpMessage('');
     setRsvpAttendance('attending');
-    setRsvpCount(data.rsvp.guestCountOptions?.[1] || '2 Persons');
     setRsvpNameError(false);
     setRsvpErrorMsg(null);
     setIsSubmittingRsvp(false);
@@ -216,15 +209,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
     return () => window.removeEventListener('keydown', handleKey);
   }, [activeLightboxIndex, data.gallery.length]);
 
-  // Drawer keyboard controls (Escape closes drawer)
-  useEffect(() => {
-    if (!isNavDrawerOpen) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsNavDrawerOpen(false);
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [isNavDrawerOpen]);
 
   // Add to Calendar using centralized date, time and venue data
   const handleAddToCalendar = () => {
@@ -982,7 +966,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                   <div className="success-icon">✨ 💌 🪔</div>
                   <h4 className="success-title gold-text">RSVP Received with Joy!</h4>
                   <p className="success-msg">
-                    Thank you, <strong>{rsvpName}</strong>. Your response ({`Attending with ${rsvpCount}`}) and heartfelt blessings have been added to our celebration wall.
+                    Thank you, <strong>{rsvpName}</strong>. Your response and heartfelt blessings have been added to our celebration wall.
                   </p>
                   {data.rsvp.confirmationNote && (
                     <p className="confirmation-note" style={{ color: '#c9a45c', fontSize: '0.9rem', marginTop: '0.75rem', fontStyle: 'italic' }}>
@@ -1023,26 +1007,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                     )}
                   </div>
 
-                  <div className="form-group">
-                    <label htmlFor="rsvpGuestsCount" className="form-label">
-                      Number of Guests Attending
-                    </label>
-                    <select
-                      id="rsvpGuestsCount"
-                      className="form-select"
-                      value={rsvpCount}
-                      onChange={(e) => setRsvpCount(e.target.value)}
-                    >
-                        {(data.rsvp.guestCountOptions && data.rsvp.guestCountOptions.length > 0
-                          ? data.rsvp.guestCountOptions
-                          : ['1 Person', '2 Persons', '3 Persons', '4 Persons', '5+ Persons (Family)']
-                        ).map((opt, idx) => (
-                          <option key={idx} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+
 
                   <div className="form-group">
                     <label htmlFor="rsvpMessage" className="form-label">
@@ -1212,91 +1177,6 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
               </svg>
             </button>
           </div>
-        </div>
-      )}
-      {/* QUICK NAVIGATION FLOATING TRIGGER */}
-      <button
-        type="button"
-        className="quick-nav-drawer-trigger"
-        onClick={() => setIsNavDrawerOpen(true)}
-        aria-label="Open Navigation Menu"
-        title="Quick Navigation"
-      >
-        <span className="nav-trigger-icon">📜</span>
-        <span className="nav-trigger-text">Menu</span>
-      </button>
-
-      {/* QUICK NAVIGATION OFF-CANVAS DRAWER */}
-      {isNavDrawerOpen && (
-        <div className="nav-drawer-overlay" onClick={() => setIsNavDrawerOpen(false)}>
-          <aside
-            className="nav-drawer-panel"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-label="Wedding Site Navigation"
-          >
-            <div className="nav-drawer-header">
-              <div>
-                <span className="nav-drawer-badge">Auspicious Wedding</span>
-                <h3 className="nav-drawer-title gold-text">Lahari & Shiva Kumar</h3>
-              </div>
-              <button
-                type="button"
-                className="nav-drawer-close"
-                onClick={() => setIsNavDrawerOpen(false)}
-                aria-label="Close menu"
-              >
-                &times;
-              </button>
-            </div>
-
-            <nav className="nav-drawer-links">
-              {[
-                { href: '#heroInvitation', label: 'Wedding Invitation', icon: '🌸' },
-                { href: '#divineBlessingSection', label: 'Divine Shloka', icon: '🕉️' },
-                { href: '#countdownSection', label: 'Sumuhurtham & Countdown', icon: '🪔' },
-                { href: '#coupleSection', label: 'The Bride & Groom', icon: '👫' },
-                { href: '#wellWishersSection', label: 'Family & Well Wishers', icon: '🌺' },
-                { href: '#ritualsSection', label: 'Sacred Ceremonies', icon: '🌿' },
-                { href: '#itinerarySection', label: 'Schedule of Events', icon: '📅' },
-                { href: '#venueSection', label: 'Wedding Venue', icon: '🏛️' },
-                { href: '#gallerySection', label: 'Memories & Moments', icon: '📸' },
-                { href: '#rsvpSection', label: 'RSVP & Blessings', icon: '💌' },
-                { href: '#closingSection', label: 'Mangalam & Gratitude', icon: '🙏' },
-              ].map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="nav-drawer-item"
-                  onClick={() => setIsNavDrawerOpen(false)}
-                >
-                  <span className="nav-item-icon">{item.icon}</span>
-                  <span className="nav-item-label">{item.label}</span>
-                </a>
-              ))}
-            </nav>
-
-            <div className="nav-drawer-footer">
-              <button
-                type="button"
-                onClick={handleShareInvitation}
-                className="primary-btn nav-drawer-share-btn"
-                style={{ width: '100%', marginBottom: '0.65rem', fontSize: '0.8rem', padding: '0.65rem 1rem', minHeight: 'auto' }}
-              >
-                <span>💌 Share Invitation</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsNavDrawerOpen(false);
-                  onReplayEntry();
-                }}
-                className="secondary-btn nav-drawer-replay"
-              >
-                <span>🎬 Replay Grand Entrance</span>
-              </button>
-            </div>
-          </aside>
         </div>
       )}
 

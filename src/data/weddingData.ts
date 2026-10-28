@@ -446,7 +446,7 @@ export const weddingData: WeddingData = {
     guestCountOptions: ["1 Person", "2 Persons", "3 Persons", "4 Persons", "5+ Persons (Family)"],
     confirmationNote: "Thank you for sharing in our holy wedding happiness! Your warm wishes and RSVP have been noted.",
     disabledMessage: "RSVP for this auspicious ceremony has concluded. We warmly look forward to your presence and blessings!",
-    submissionEndpoint: "", // Optional remote API or webhook endpoint for guest RSVPs
+    submissionEndpoint: "https://script.google.com/macros/s/AKfycbw7p4_7LBRoGnt7k5sUBpda0kAGgoR-Dk6BT3djpKUG3x1FCqkU_Y6_NeCRLQjcugEDvw/exec",
     initialBlessings: [
       {
         name: "Devarakonda Family (Bride's Parents)",

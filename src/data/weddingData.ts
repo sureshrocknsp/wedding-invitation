@@ -370,6 +370,24 @@ export const weddingData: WeddingData = {
       featured: true
     },
     {
+      src: "/assets/images/couple_varmala_blessings.jpg",
+      title: "Auspicious Varmala Union (పూలమాలల పవిత్ర బంధం)",
+      caption: "Chi. Shiva Kumar Yadav & Chi.La.Sow. Lahari adorned in sacred floral garlands",
+      category: "Couple"
+    },
+    {
+      src: "/assets/images/couple_mandapam_ceremony.jpg",
+      title: "Kalyana Mandapam Vedika (కళ్యాణ వేదికపై దంపతులు)",
+      caption: "The newly wedded couple receiving elders' heartfelt congratulations and blessings",
+      category: "Ritual"
+    },
+    {
+      src: "/assets/images/couple_hand_in_hand_temple.jpg",
+      title: "Eternal Steps of Companionship (సహధర్మచారిణిగా అడుగులు)",
+      caption: "Walking hand in hand towards the divine sanctum, embarking on a sacred lifelong journey",
+      category: "Moments"
+    },
+    {
       src: "/assets/images/bride_ceremony_full.jpg",
       title: "The Radiant Bride — Chi.La.Sow. Lahari (చి॥ల॥సౌ॥ లహరి)",
       caption: "Adorned in auspicious Kalyana Pattu and traditional gold jewellery at the Kalyana Vedika",
@@ -392,6 +410,18 @@ export const weddingData: WeddingData = {
       title: "Auspicious Beginning (వరుని దివ్య సంకల్పం)",
       caption: "Chi. Shiva Kumar Yadav surrounded by wedding festivities and elder blessings",
       category: "Groom"
+    },
+    {
+      src: "/assets/images/bride_traditional_silk.jpg",
+      title: "Traditional Bridal Elegance (చి॥ల॥సౌ॥ లహరి మంగళ రూపం)",
+      caption: "Radiant bride Chi.La.Sow. Lahari in exquisite pattu saree, vaddanam, and temple gold jewellery",
+      category: "Bride"
+    },
+    {
+      src: "/assets/images/couple_portrait.jpg",
+      title: "The Blessed Couple",
+      caption: "Chi. Shiva Kumar Yadav & Chi.La.Sow. Lahari (Shireesha)",
+      category: "Couple"
     },
     {
       src: "/assets/images/original_wedding_card.jpg",
@@ -427,12 +457,6 @@ export const weddingData: WeddingData = {
       src: "/assets/images/groom_portrait.jpg",
       title: "చి॥ శివకుమార్ యాదవ్ — The Groom",
       caption: "Chi. Shiva Kumar Yadav in traditional silk wedding attire & sacred tilak",
-      category: "Couple"
-    },
-    {
-      src: "/assets/images/couple_portrait.jpg",
-      title: "The Blessed Couple",
-      caption: "Chi. Shiva Kumar Yadav & Chi.La.Sow. Lahari (Shireesha)",
       category: "Couple"
     },
     {

@@ -892,7 +892,7 @@ export const MainInvitation: React.FC<MainInvitationProps> = ({
                 .map((g, idx) => (
                   <div
                     key={idx}
-                    className="gallery-item"
+                    className={`gallery-item ${g.featured ? 'gallery-item-featured' : ''}`}
                     onClick={() => openLightbox(idx)}
                     role="button"
                     tabIndex={0}

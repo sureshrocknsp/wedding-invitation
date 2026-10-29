@@ -104,6 +104,7 @@ export interface WeddingData {
     title: string;
     caption: string;
     category: string;
+    featured?: boolean;
   }>;
   rsvp: {
     enabled: boolean;
@@ -362,6 +363,37 @@ export const weddingData: WeddingData = {
   ],
   gallery: [
     {
+      src: "/assets/images/wedding_moments_collage.jpg",
+      title: "Glimpses of Joy: Memories & Moments (వివాహ వేడుక దివ్య సంబరాలు)",
+      caption: "Sacred moments of Varmala, Mangalyadharanam, Talambralu, and eternal promises",
+      category: "Moments",
+      featured: true
+    },
+    {
+      src: "/assets/images/bride_ceremony_full.jpg",
+      title: "The Radiant Bride — Chi.La.Sow. Lahari (చి॥ల॥సౌ॥ లహరి)",
+      caption: "Adorned in auspicious Kalyana Pattu and traditional gold jewellery at the Kalyana Vedika",
+      category: "Bride"
+    },
+    {
+      src: "/assets/images/groom_ceremony_full.jpg",
+      title: "The Majestic Groom — Chi. Shiva Kumar Yadav (చి॥ శివకుమార్ యాదవ్)",
+      caption: "Stepping into grihastha ashram in traditional silk panche & kanduva with gold zari",
+      category: "Groom"
+    },
+    {
+      src: "/assets/images/bride_ceremony_portrait.jpg",
+      title: "Grace & Bridal Radiance (వధువు మంగళ రూపం)",
+      caption: "Joyous smiles, divine blessings, and traditional Telugu wedding elegance",
+      category: "Bride"
+    },
+    {
+      src: "/assets/images/groom_ceremony_portrait.png",
+      title: "Auspicious Beginning (వరుని దివ్య సంకల్పం)",
+      caption: "Chi. Shiva Kumar Yadav surrounded by wedding festivities and elder blessings",
+      category: "Groom"
+    },
+    {
       src: "/assets/images/original_wedding_card.jpg",
       title: "Official Wedding Card (ఆహ్వాన శుభ పత్రిక)",
       caption: "Original English & Telugu Marriage Invitation Card",
@@ -432,12 +464,6 @@ export const weddingData: WeddingData = {
       title: "Evening Felicitation",
       caption: "Welcoming loved ones under festive lights",
       category: "Reception"
-    },
-    {
-      src: "/assets/images/grand_doors.jpg",
-      title: "Grand Entrance Portal",
-      caption: "Traditional carved temple double doors",
-      category: "Entrance"
     }
   ],
   rsvp: {
